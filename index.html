@@ -1,795 +1,1353 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Laxman Khatri — Software Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <style>
+    :root {
+      --bg: #080c14;
+      --bg2: #0d1220;
+      --surface: #111827;
+      --border: rgba(99,179,237,0.12);
+      --accent: #63b3ed;
+      --accent2: #9f7aea;
+      --accent3: #68d391;
+      --text: #e2e8f0;
+      --muted: #718096;
+      --card: rgba(17,24,39,0.8);
+      --font-display: 'Syne', sans-serif;
+      --font-body: 'Space Grotesk', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
 
-  
-	<meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Start your development with JohnDoe landing page.">
-    <meta name="author" content="Devcrud">
-    <title>Laxman Khatri</title>
-    <!-- font icons -->
-    <link rel="stylesheet" href="assets/vendors/themify-icons/css/themify-icons.css">
-    <!-- Bootstrap + JohnDoe main styles -->
-	<link rel="stylesheet" href="assets/css/johndoe.css">
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── Canvas ── */
+    #bg-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── Noise overlay ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.4;
+    }
+
+    /* ── Layout ── */
+    .wrap { position: relative; z-index: 2; }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.2rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.4s, backdrop-filter 0.4s;
+    }
+
+    nav.scrolled {
+      background: rgba(8,12,20,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1px;
+      background: var(--accent);
+      transition: width 0.3s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* ── Hero ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 2.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .hero-name {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 9vw, 7rem);
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      color: #fff;
+      margin-bottom: 0.6rem;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .hero-name .gradient {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, var(--accent3) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-role {
+      font-family: var(--font-display);
+      font-size: clamp(1.1rem, 3vw, 1.8rem);
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 2rem;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .hero-desc {
+      max-width: 540px;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.75;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.8rem;
+      border-radius: 6px;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.25s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #080c14;
+    }
+
+    .btn-primary:hover {
+      background: #90cdf4;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(99,179,237,0.35);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    /* ── Scroll indicator ── */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0.4;
+      animation: scrollBob 2s ease-in-out infinite;
+    }
+
+    .scroll-hint span {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+    }
+
+    @keyframes scrollBob {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ── Sections ── */
+    section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 6rem 2.5rem;
+    }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 2rem;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #fff;
+      margin-bottom: 3rem;
+      line-height: 1.15;
+    }
+
+    /* ── About ── */
+    #about .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--muted);
+      margin-bottom: 1.2rem;
+      line-height: 1.8;
+    }
+
+    .about-photo {
+      position: relative;
+    }
+
+    .about-photo img {
+      width: 100%;
+      max-width: 380px;
+      border-radius: 12px;
+      display: block;
+      filter: grayscale(20%);
+      transition: filter 0.4s;
+    }
+
+    .about-photo:hover img { filter: grayscale(0%); }
+
+    .about-photo::before {
+      content: '';
+      position: absolute;
+      inset: -8px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      z-index: -1;
+      opacity: 0.3;
+    }
+
+    .about-photo-caption {
+      position: absolute;
+      bottom: -1rem;
+      right: -1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.8rem 1.2rem;
+    }
+
+    .about-photo-caption .location {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+    }
+
+    .about-photo-caption .lake {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* ── Skills ── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .skill-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.8rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+
+    .skill-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s;
+    }
+
+    .skill-card:hover { transform: translateY(-4px); border-color: rgba(99,179,237,0.3); }
+    .skill-card:hover::before { transform: scaleX(1); }
+
+    .skill-cat {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--accent2);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+
+    .skill-card h3 {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .tag {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 0.25rem 0.6rem;
+      background: rgba(99,179,237,0.1);
+      border: 1px solid rgba(99,179,237,0.2);
+      border-radius: 4px;
+      color: var(--accent);
+    }
+
+    .tag.purple { background: rgba(159,122,234,0.1); border-color: rgba(159,122,234,0.2); color: var(--accent2); }
+    .tag.green { background: rgba(104,211,145,0.1); border-color: rgba(104,211,145,0.2); color: var(--accent3); }
+
+    /* ── Experience ── */
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 3rem;
+      padding-left: 1.5rem;
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -2.5rem;
+      top: 0.4rem;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 12px var(--accent);
+    }
+
+    .timeline-date {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-role {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.2rem;
+    }
+
+    .timeline-company {
+      font-size: 0.9rem;
+      color: var(--accent2);
+      font-weight: 500;
+      margin-bottom: 0.8rem;
+    }
+
+    .timeline-desc {
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 580px;
+    }
+
+    /* ── Projects ── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .project-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(99,179,237,0.3);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+
+    .project-card .glow {
+      position: absolute;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(99,179,237,0.08) 0%, transparent 70%);
+      top: -60px; right: -60px;
+      pointer-events: none;
+    }
+
+    .project-card.alt .glow {
+      background: radial-gradient(circle, rgba(159,122,234,0.08) 0%, transparent 70%);
+    }
+
+    .project-num {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      margin-bottom: 1rem;
+    }
+
+    .project-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.8rem;
+      line-height: 1.3;
+    }
+
+    .project-card p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .project-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .project-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: gap 0.2s;
+    }
+
+    .project-link:hover { gap: 0.7rem; }
+
+    /* ── Education ── */
+    .edu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .edu-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 2rem;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+
+    .edu-card:hover { transform: translateY(-4px); border-color: rgba(99,179,237,0.3); }
+
+    .edu-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.6rem;
+      border-radius: 3px;
+      background: rgba(99,179,237,0.12);
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .edu-card h3 {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.3rem;
+      line-height: 1.3;
+    }
+
+    .edu-school {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .edu-gpa {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--accent3);
+    }
+
+    /* ── Certifications ── */
+    .cert-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .cert-item {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      padding: 1.2rem 1.5rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .cert-item:hover { transform: translateX(6px); border-color: rgba(99,179,237,0.3); }
+
+    .cert-icon {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .cert-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* ── Hosted ── */
+    .hosted-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .hosted-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 1.4rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.25s;
+    }
+
+    .hosted-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    }
+
+    .hosted-card .name {
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.9rem;
+    }
+
+    .hosted-card .url {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--muted);
+    }
+
+    .hosted-arrow {
+      color: var(--accent);
+      font-size: 1rem;
+      transition: transform 0.2s;
+    }
+
+    .hosted-card:hover .hosted-arrow { transform: translateX(4px); }
+
+    /* ── Contact ── */
+    #contact {
+      text-align: center;
+    }
+
+    #contact .section-label { justify-content: center; }
+    #contact .section-label::before { display: none; }
+
+    .contact-intro {
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.8;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.4rem;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      background: var(--card);
+      border: 1px solid var(--border);
+      text-decoration: none;
+      transition: all 0.25s;
+    }
+
+    .contact-link:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      transform: translateY(-3px);
+    }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 2rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ── Floating badge ── */
+    .open-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      background: rgba(104,211,145,0.1);
+      border: 1px solid rgba(104,211,145,0.25);
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--accent3);
+      margin-bottom: 2rem;
+    }
+
+    .open-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--accent3);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    /* ── Counter strip ── */
+    .stats-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 4rem;
+    }
+
+    .stat-box {
+      background: var(--bg2);
+      padding: 1.8rem 1.5rem;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.2rem; }
+      .nav-links { gap: 1.2rem; }
+      section { padding: 4rem 1.2rem; }
+      #hero { padding: 0 1.2rem; }
+      #about .about-grid { grid-template-columns: 1fr; }
+      .skills-grid { grid-template-columns: 1fr 1fr; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .edu-grid { grid-template-columns: 1fr; }
+      .hosted-grid { grid-template-columns: 1fr; }
+      .stats-strip { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 480px) {
+      .nav-links { display: none; }
+      .skills-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
 </head>
-<body data-spy="scroll" data-target=".navbar" data-offset="40" id="home">
-    <!-- <a href="components.html" class="btn btn-primary btn-component" data-spy="affix" data-offset-top="600"><i class="ti-shift-left-alt"></i> Components</a> -->
-    <header class="header">
-        <div class="container">
-            <ul class="social-icons pt-3">
-                <li class="social-item"><a class="social-link text-light" href="https://www.facebook.com/laxman.khatri.328" target="_blank"><i class="ti-facebook" aria-hidden="true"></i></a></li>
-                <!-- <li class="social-item"><a class="social-link text-light" href="#"><i class="ti-twitter" aria-hidden="true"></i></a></li> -->
-                <!-- <li class="social-item"><a class="social-link text-light" href="#"><i class="ti-google" aria-hidden="true"></i></a></li> -->
-                <li class="social-item"><a class="social-link text-light" href="https://www.instagram.com/laxmankhatri328/" target="_blank"><i class="ti-instagram" aria-hidden="true"></i></a></li>
-                <li class="social-item"><a class="social-link text-light" href="https://github.com/melaxman" target="_blank"><i class="ti-github" aria-hidden="true"></i></a></li>
-            </ul>  
-            <div class="header-content">
-                <h4 class="header-subtitle" style="color: yellow;">Hello, I am</h4>
-                <h1 class="header-title" style="color: aqua;">Laxman Khatri</h1>
-                <h6 class="header-mono" style="color:yellow;">back end Designer | Developer</h6>
-                <button class="btn btn-primary btn-rounded"><i class="ti-printer pr-2"></i>Just Touch</button>
-            </div>
-        </div>
-    </header>
-    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-white" data-spy="affix" data-offset-top="510" id="lax3">
-        <div class="container">
-            <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse mt-sm-20 navbar-collapse" id="navbarSupportedContent" id="lax3"> 
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a href="#home" class="nav-link" id="lax4">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#about" class="nav-link" id="lax4">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#resume" class="nav-link" id="lax4"9>Resume</a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav brand">
-                    <img src="assets/imgs/lax2.jpg" alt="" class="brand-img">
-                    <li class="brand-txt">
-                        <h5 class="brand-title">Laxman Khatri</h5>
-                        <div class="brand-subtitle">Web Designer | Developer</div>
-                    </li>
-                </ul>
-                <ul class="navbar-nav ml-auto" id="lax3">
-                    <li class="nav-item">
-                        <!-- <a href="#portfolio" class="nav-link">Portfolio</a> -->
-                    </li>
-                    <li class="nav-item">
-                        <!-- <a href="#blog" class="nav-link">Blog</a> -->
-                    </li>
-                    <li class="nav-item last-item">
-                        <a href="#contact" class="nav-link" id="lax4">Contact</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <div class="container-fluid" id="lax3">
-        <div id="about" class="row about-section">
-            <div class="col-lg-4 about-card">
-                <h3 class="font-weight-light" id="lax4">Who am I ?</h3>
-                <span class="line mb-5"></span>
-                <h5 class="mb-3" id="lax" >A Web Designer / Developer </h5>
-                <p class="mt-20" id="lax2"> Welcome to my portfolio! I'm Laxman Khatri, a skilled web developer and designer. With expertise in both coding and design, I create visually appealing and functional websites. Explore my work and let's bring your digital vision to life!</p>
-                <button class="btn btn-outline-danger"><i class="icon-down-circled2 "></i>Just Touch</button>
-            </div>
-            <div class="col-lg-4 about-card" id="lax3">
-                <h3 class="font-weight-light" id="lax4">Personal Info</h3>
-                <span class="line mb-5"></span>
-                <ul class="mt40 info list-unstyled">
-                    <!-- <li><span>Birthdate</span> : 09/13/1996</li> -->
-                    <li><span>Email</span> : laxmankhatri568@gmail.com</li>
-                    <li><span>Phone</span> : + (977) 9765461633</li>
-                    <li><span>Linkedin</span> : <a href="https://www.linkedin.com/in/laxman-khatri-32b289194/">Laxman Khatri</a></li>
-                    <li><span>Address</span> :  Kathmandu, Nepal</li>
-                </ul>
-                <ul class="social-icons pt-3" id="lax3">
-                    <li class="social-item"><a class="social-link" href="https://www.facebook.com/laxman.khatri.328" target="_blank"><i class="ti-facebook" aria-hidden="true"></i></a></li>
-                    <!-- <li class="social-item"><a class="social-link" href="#"><i class="ti-twitter" aria-hidden="true"></i></a></li> -->
-                    <!-- <li class="social-item"><a class="social-link" href="#"><i class="ti-google" aria-hidden="true"></i></a></li> -->
-                    <li class="social-item"><a class="social-link" href="https://www.instagram.com/laxmankhatri328/" target="_blank"><i class="ti-instagram" aria-hidden="true"></i></a></li>
-                    <li class="social-item"><a class="social-link" href="https://github.com/melaxman" target="_blank"><i class="ti-github" aria-hidden="true"></i></a></li>
-                </ul>  
-            </div>
-            <div class="col-lg-4 about-card" id="lax3">
-                <h3 class="font-weight-light" id="lax4">My Expertise</h3>
-                <span class="line mb-5"></span>
-                <div class="row">
-                    <div class="col-1 text-danger pt-1"><i class="ti-widget icon-lg"></i></div>
-                    <div class="col-10 ml-auto mr-3">
-                        <h6>UX Design</h6>
-                        <p class="subtitle">Loading....</p>
-                        <hr>
-                    </div>
-                </div>
-                <div class="row" id="lax3">
-                    <div class="col-1 text-danger pt-1"><i class="ti-paint-bucket icon-lg"></i></div>
-                    <div class="col-10 ml-auto mr-3">
-                        <h6>Web Development</h6>
-                        <p class="subtitle">Front-end developer</p>
-                        <hr>
-                    </div>
-                </div>
-                <div class="row" id="lax3">
-                    <div class="col-1 text-danger pt-1"><i class="ti-stats-up icon-lg"></i></div>
-                    <div class="col-10 ml-auto mr-3">
-                        <h6>Digital Marketing</h6>
-                        <p class="subtitle">Loading....</p>
-                        <hr>
-                    </div>
-                </div>
-            </div>
-        </div>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<div class="wrap">
+
+  <!-- ══ NAV ══ -->
+  <nav id="nav">
+    <a class="nav-logo" href="#hero">LK<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ══ HERO ══ -->
+  <section id="hero" style="position:relative;">
+    <div class="open-badge" id="hero-badge">
+      <span class="open-dot"></span>
+      Open to opportunities
     </div>
-
-    <!--Resume Section-->
-    <section class="section" id="resume">
-        <div class="container">
-            <h2 class="mb-5" id="lax4"><span class="text-danger">My</span> Resume</h2>
-            <div class="row">
-                <div class="col-md-6 col-lg-4">
-                    <div class="card">
-                       <div class="card-header">
-                            <div class="mt-2">
-                                <h4 id="lax4">Expertise</h4>
-                                <span class="line"></span>  
-                            </div>
-                        </div>
-                        <div class="card-body" id="lax3">
-                            <h6 class="title text-danger">2017 - Present</h6>
-                            <P>web Developer</P>
-                            <P class="subtitle">back-end development with PHP,JAVA,Python</P>
-                            <hr>
-                            <h6 class="title text-danger">2016 - 2017</h6>
-                            <P>Front-end Developer</P>
-                            <P class="subtitle">HTML,CSS,JS</P>
-                            <hr>
-                            <h6 class="title text-danger">2015 - 2016</h6>
-                            <P>Research</P>
-                            <P class="subtitle">Everything</P>
-                            <!-- <P>UX Designer</P> -->
-                            <!-- <P class="subtitle">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum recusandae, cupiditate ullam dolor ratione repellendus.aliquid repudiandae saepe!.</P> -->
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="card">
-                       <div class="card-header">
-                            <div class="mt-2">
-                                <h4 id="lax4">Education</h4>
-                                <span class="line"></span>  
-                            </div>
-                        </div>
-                        <div class="card-body" id="lax3">
-                            <h6 class="title text-danger">2022 - Present</h6>
-                            <P>B.E Software Engineering</P>
-                            <P class="subtitle">Studied at NCIT(Pokhara University).</P>
-                            <hr>
-                            <h6 class="title text-danger">2020 - 2022</h6>
-                            <P>+2 level</P>
-                            <P class="subtitle">Studied at Eager Bridge Secondary Boarding School</P>
-                            <hr>
-                            <h6 class="title text-danger">2014- 2020</h6>
-                            <P>Secondary level</P>
-                            <P class="subtitle">Eager Bridge Secondary Boarding School</P>
-                            
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4" id="lax3">
-                    <div class="card">
-                       <div class="card-header">
-                            <div class="pull-left">
-                                <h4 class="mt-2" id="lax4">Skills</h4>
-                                <span class="line"></span>  
-                            </div>
-                        </div>
-                        <div class="card-body pb-2" id="lax3">
-                           <h6>HTMl &amp; CSS</h6>
-                            <div class="progress mb-3">
-                                <div class="progress-bar bg-danger" role="progressbar" style="width: 97%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <h6>JavaScript</h6>
-                            <div class="progress mb-3">
-                                <div class="progress-bar bg-danger" role="progressbar" style="width: 85%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <h6>PHP</h6>
-                            <div class="progress mb-3">
-                                <div class="progress-bar bg-danger" role="progressbar" style="width: 80%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <h6>SQL</h6>
-                            <div class="progress mb-3">
-                                <div class="progress-bar bg-danger" role="progressbar" style="width: 90%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <h6>JAVA</h6>
-                            <div class="progress mb-3">
-                                <div class="progress-bar bg-danger" role="progressbar" style="width: 90%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <h6>Python</h6>
-                            <div class="progress mb-3">
-                                <div class="progress-bar bg-danger" role="progressbar" style="width: 90%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- <div class="card" id="lax3"> -->
-                       <!-- <div class="card-header"> -->
-                            <!-- <div class="pull-left"> -->
-                                <!-- <h4 class="mt-2" id="lax4">Languages</h4> -->
-                                <!-- <span class="line"></span>   -->
-                            <!-- </div> -->
-                        <!-- </div> -->
-                        <!-- <div class="card-body pb-2"> -->
-                           <!-- <h6>English</h6> -->
-                            <!-- <div class="progress mb-3"> -->
-                                <!-- <div class="progress-bar bg-danger" role="progressbar" style="width: 80%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div> -->
-                            <!-- </div> -->
-                            <!-- <h6>Nepali</h6> -->
-                            <!-- <div class="progress mb-3"> -->
-                                <!-- <div class="progress-bar bg-danger" role="progressbar" style="width: 45%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div> -->
-                            <!-- </div> -->
-                            <!-- <h6>Hindi</h6> -->
-                            <!-- <div class="progress mb-3"> -->
-                                <!-- <div class="progress-bar bg-danger" role="progressbar" style="width: 67%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div> -->
-                            <!-- </div> -->
-                        <!-- </div> -->
-                    <!-- </div> -->
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section bg-dark text-center">
-        <div class="container">
-            <div class="row text-center">
-                <div class="col-md-6 col-lg-3">
-                    <div class="row ">
-                        <div class="col-5 text-right text-light border-right py-3">
-                            <div class="m-auto"><i class="ti-alarm-clock icon-xl"></i></div>
-                        </div>
-                        <div class="col-7 text-left py-3">
-                            <h1 class="text-danger font-weight-bold font40">0</h1>
-                            <p class="text-light mb-1">Hours Worked</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="row">
-                        <div class="col-5 text-right text-light border-right py-3">
-                            <div class="m-auto"><i class="ti-layers-alt icon-xl"></i></div>
-                        </div>
-                        <div class="col-7 text-left py-3">
-                            <h1 class="text-danger font-weight-bold font40">0K</h1>
-                            <p class="text-light mb-1">Project Finished</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="row">
-                        <div class="col-5 text-right text-light border-right py-3">
-                            <div class="m-auto"><i class="ti-face-smile icon-xl"></i></div>
-                        </div>
-                        <div class="col-7 text-left py-3">
-                            <h1 class="text-danger font-weight-bold font40">0K</h1>
-                            <p class="text-light mb-1">Happy Clients</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="row">
-                        <div class="col-5 text-right text-light border-right py-3">
-                            <div class="m-auto"><i class="ti-heart-broken icon-xl"></i></div>
-                        </div>
-                        <div class="col-7 text-left py-3">
-                            <h1 class="text-danger font-weight-bold font40">0k</h1>
-                            <p class="text-light mb-1">Coffee Drinked</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- <section class="section" id="service" id="lax3"> -->
-        <!-- <div class="container"> -->
-            <!-- <h2 class="mb-5 pb-4" id="lax4"><span class="text-danger">My</span> Services</h2> -->
-            <!-- <div class="row"> -->
-                <!-- <div class="col-md-4 col-sm-6"> -->
-                    <!-- <div class="card mb-5"> -->
-                       <!-- <div class="card-header has-icon"> -->
-                            <!-- <i class="ti-vector text-danger" aria-hidden="true"></i> -->
-                        <!-- </div> -->
-                        <!-- <div class="card-body px-4 py-3"> -->
-                            <!-- <h5 class="mb-3 card-title text-dark">Ullam</h5> -->
-                            <!-- <P class="subtitle"> nothing.</P> -->
-                        <!-- </div> -->
-                    <!-- </div> -->
-                <!-- </div> -->
-                <!-- <div class="col-md-4 col-sm-6"> -->
-                    <!-- <div class="card mb-5"> -->
-                       <!-- <div class="card-header has-icon"> -->
-                            <!-- <i class="ti-write text-danger" aria-hidden="true"></i> -->
-                        <!-- </div> -->
-                        <!-- <div class="card-body px-4 py-3"> -->
-                            <!-- <h5 class="mb-3 card-title text-dark">Asperiores</h5> -->
-                            <!-- <P class="subtitle">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam commodi provident, dolores reiciendis enim pariatur error optio, tempora ex, nihil nesciunt! In praesentium sunt commodi, unde ipsam ex veritatis laboriosam dolor asperiores suscipit blanditiis, dignissimos quos nesciunt nulla aperiam officia.</P> -->
-                        <!-- </div> -->
-                    <!-- </div> -->
-                <!-- </div> -->
-                <!-- <div class="col-md-4 col-sm-6"> -->
-                    <!-- <div class="card mb-5"> -->
-                       <!-- <div class="card-header has-icon"> -->
-                            <!-- <i class="ti-package text-danger" aria-hidden="true"></i> -->
-                        <!-- </div> -->
-                        <!-- <div class="card-body px-4 py-3"> -->
-                            <!-- <h5 class="mb-3 card-title text-dark">Tempora</h5> -->
-                            <!-- <P class="subtitle">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam commodi provident, dolores reiciendis enim pariatur error optio, tempora ex, nihil nesciunt! In praesentium sunt commodi, unde ipsam ex veritatis laboriosam dolor asperiores suscipit blanditiis, dignissimos quos nesciunt nulla aperiam officia.</P> -->
-                        <!-- </div> -->
-                    <!-- </div> -->
-                <!-- </div> -->
-                <!-- <div class="col-md-4 col-sm-6"> -->
-                    <!-- <div class="card mb-5"> -->
-                       <!-- <div class="card-header has-icon"> -->
-                            <!-- <i class="ti-map-alt text-danger" aria-hidden="true"></i> -->
-                        <!-- </div> -->
-                        <!-- <div class="card-body px-4 py-3"> -->
-                            <!-- <h5 class="mb-3 card-title text-dark">Provident</h5> -->
-                            <!-- <P class="subtitle">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam commodi provident, dolores reiciendis enim pariatur error optio, tempora ex, nihil nesciunt! In praesentium sunt commodi, unde ipsam ex veritatis laboriosam dolor asperiores suscipit blanditiis, dignissimos quos nesciunt nulla aperiam officia.</P> -->
-                        <!-- </div> -->
-                    <!-- </div> -->
-                <!-- </div> -->
-                <!-- <div class="col-md-4 col-sm-6"> -->
-                    <!-- <div class="card mb-5"> -->
-                       <!-- <div class="card-header has-icon"> -->
-                            <!-- <i class="ti-bar-chart text-danger" aria-hidden="true"></i> -->
-                        <!-- </div> -->
-                        <!-- <div class="card-body px-4 py-3"> -->
-                            <!-- <h5 class="mb-3 card-title text-dark">Consectetur</h5> -->
-                            <!-- <P class="subtitle">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam commodi provident, dolores reiciendis enim pariatur error optio, tempora ex, nihil nesciunt! In praesentium sunt commodi, unde ipsam ex veritatis laboriosam dolor asperiores suscipit blanditiis, dignissimos quos nesciunt nulla aperiam officia.</P> -->
-                        <!-- </div> -->
-                    <!-- </div> -->
-                <!-- </div> -->
-                <!-- <div class="col-md-4 col-sm-6"> -->
-                    <!-- <div class="card mb-5"> -->
-                       <!-- <div class="card-header has-icon"> -->
-                            <!-- <i class="ti-support text-danger" aria-hidden="true"></i> -->
-                        <!-- </div> -->
-                        <!-- <div class="card-body px-4 py-3"> -->
-                            <!-- <h5 class="mb-3 card-title text-dark">Veritatis</h5> -->
-                            <!-- <P class="subtitle">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam commodi provident, dolores reiciendis enim pariatur error optio, tempora ex, nihil nesciunt! In praesentium sunt commodi, unde ipsam ex veritatis laboriosam dolor asperiores suscipit blanditiis, dignissimos quos nesciunt nulla aperiam officia.</P> -->
-                        <!-- </div> -->
-                    <!-- </div> -->
-                <!-- </div> -->
-            <!-- </div> -->
-        <!-- </div> -->
-    <!-- </section> -->
-
-    <!-- <section class="section bg-custom-gray" id="price"> -->
-        <!-- <div class="container"> -->
-            <!-- <h1 class="mb-5"><span class="text-danger">Packs</span> Pricing</h1> -->
-            <!-- <div class="row align-items-center"> -->
-                <!-- <div class="col-md-6 col-lg-3"> -->
-                    <!-- <div class="price-card text-center mb-4"> -->
-                        <!-- <h3 class="price-card-title">Free</h3> -->
-                        <!-- <div class="price-card-cost"> -->
-                            <!-- <sup class="ti-money"></sup> -->
-                            <!-- <span class="num">0</span> -->
-                            <!-- <span class="date">MO</span> -->
-                        <!-- </div> -->
-                        <!-- <ul class="list"> -->
-                            <!-- <li class="list-item">5 <span class="text-muted">Project</span></li> -->
-                            <!-- <li class="list-item">1GB <span class="text-muted">Storage</span></li> -->
-                            <!-- <li class="list-item"><span class="text-muted">No Domain</span></li> -->
-                            <!-- <li class="list-item">1 <span class="text-muted">User</span></li> -->
-                        <!-- </ul> -->
-                        <!-- <button class="btn btn-primary btn-rounded w-lg">Subscribe</button> -->
-                    <!-- </div> -->
-                <!-- </div> -->
-                <!-- <div class="col-md-6 col-lg-3"> -->
-                    <!-- <div class="price-card text-center mb-4"> -->
-                        <!-- <h3 class="price-card-title">Basic</h3> -->
-                        <!-- <div class="price-card-cost"> -->
-                            <!-- <sup class="ti-money"></sup> -->
-                            <!-- <span class="num">10</span> -->
-                            <!-- <span class="date">MO</span> -->
-                        <!-- </div> -->
-                        <!-- <ul class="list"> -->
-                            <!-- <li class="list-item">50 <span class="text-muted">Project</span></li> -->
-                            <!-- <li class="list-item">10GB <span class="text-muted">Storage</span></li> -->
-                            <!-- <li class="list-item">1<span class="text-muted">Domain</span></li> -->
-                            <!-- <li class="list-item">5 <span class="text-muted">User</span></li> -->
-                        <!-- </ul> -->
-                        <!-- <button class="btn btn-primary btn-rounded w-lg">Subscribe</button> -->
-                    <!-- </div> -->
-                <!-- </div> -->
-                <!-- <div class=/"col-md-6 col-lg-3"> -->
-                    <!-- <div class="price-card text-center price-card-requried mb-4"> -->
-                        <!-- <h3 class="price-card-title">Exclusive</h3> -->
-                        <!-- <div class="price-card-cost"> -->
-                            <!-- <sup class="ti-money"></sup> -->
-                            <!-- <span class="num">25</span> -->
-                            <!-- <span class="date">MO</span> -->
-                        <!-- </div> -->
-                        <!-- <ul class="list"> -->
-                            <!-- <li class="list-item">150 <span class="text-muted">Project</span></li> -->
-                            <!-- <li class="list-item">15GB <span class="text-muted">Storage</span></li> -->
-                            <!-- <li class="list-item">5<span class="text-muted"> Domain</span></li> -->
-                            <!-- <li class="list-item">15<span class="text-muted">User</span></li> -->
-                        <!-- </ul> -->
-                        <!-- <button class="btn btn-primary btn-rounded w-lg">Subscribe</button> -->
-                    <!-- </div> -->
-                <!-- </div> -->
-                <!-- <div class="col-md-6 col-lg-3"> -->
-                    <!-- <div class="price-card text-center mb-4"> -->
-                        <!-- <h3 class="price-card-title">Pro</h3> -->
-                        <!-- <div class="price-card-cost"> -->
-                            <!-- <sup class="ti-money"></sup> -->
-                            <!-- <span class="num">99</span> -->
-                            <!-- <span class="date">MO</span> -->
-                        <!-- </div> -->
-                        <!-- <ul class="list"> -->
-                            <!-- <li class="list-item">500 <span class="text-muted">Project</span></li> -->
-                            <!-- <li class="list-item">1000GB <span class="text-muted">Storage</span></li> -->
-                            <!-- <li class="list-item">10<span class="text-muted"> Domain</span></li> -->
-                            <!-- <li class="list-item">Unlimite<span class="text-muted">User</span></li> -->
-                        <!-- </ul> -->
-                        <!-- <button class="btn btn-primary btn-rounded w-lg">Subscribe</button> -->
-                    <!-- </div> -->
-                <!-- </div> -->
-            <!-- </div> -->
-        <!-- </div> -->
-    <!-- </section> -->
-    <!-- <section class="section bg-dark py-5"> -->
-        <!-- <div class="container text-center"> -->
-            <!-- <h2 class="text-light mb-5 font-weight-normal">I Am Available For FreeLance</h2> -->
-            <!-- <button class="btn bg-primary w-lg" >Hire me</button> -->
-        <!-- </div> -->
-    <!-- </section> -->
-
-    <!-- Portfolio Section -->
-    <!-- <section class="section bg-custom-gray" id="portfolio" id="lax3"> -->
-        <!-- <div class="container"> -->
-            <!-- <h1 class="mb-5" id="lax4"><span class="text-danger">My</span> Portfolio</h1> -->
-            <!-- <div class="portfolio"> -->
-                <!-- <div class="filters"> -->
-                    <!-- <a href="#" data-filter=".new" class="active"> -->
-                        <!-- New -->
-                    <!-- </a> -->
-                    <!-- <a href="#" data-filter=".advertising"> -->
-                        <!-- Advertising -->
-                    <!-- </a> -->
-                    <!-- <a href="#" data-filter=".branding"> -->
-                        <!-- Branding -->
-                    <!-- </a> -->
-                    <!-- <a href="#" data-filter=".web"> -->
-                        <!-- Web -->
-                    <!-- </a> -->
-                <!-- </div> -->
-                <!-- <div class="portfolio-container">  -->
-                    <!-- <div class="col-md-6 col-lg-4 web new"> -->
-                        <!-- <div class="portfolio-item"> -->
-                            <!-- <img src="assets/imgs/web-1.jpg" class="img-fluid" alt="Download free bootstrap 4 admin dashboard, free boootstrap 4 templates"> -->
-                            <!-- <div class="content-holder"> -->
-                                <!-- <a class="img-popup" href="assets/imgs/web-1.jpg"></a> -->
-                                <!-- <div class="text-holder"> -->
-                                    <!-- <h6 class="title">WEB</h6> -->
-                                    <!-- <p class="subtitle">Expedita corporis doloremque velit in totam!</p> -->
-                                <!-- </div> -->
-                            <!-- </div>    -->
-                        <!-- </div>              -->
-                    <!-- </div> -->
-                    <!-- <div class="col-md-6 col-lg-4 web new"> -->
-                        <!-- <div class="portfolio-item"> -->
-                            <!-- <img src="assets/imgs/web-2.jpg" class="img-fluid" alt="Download free bootstrap 4 admin dashboard, free boootstrap 4 templates"> -->
-                            <!-- <div class="content-holder"> -->
-                                <!-- <a class="img-popup" href="assets/imgs/web-2.jpg"></a> -->
-                                <!-- <div class="text-holder"> -->
-                                    <!-- <h6 class="title">WEB</h6> -->
-                                    <!-- <p class="subtitle">Expedita corporis doloremque velit in totam!</p> -->
-                                <!-- </div> -->
-                            <!-- </div>  -->
-                        <!-- </div>                          -->
-                    <!-- </div> -->
-                    <!-- <div class="col-md-6 col-lg-4 advertising new"> -->
-                        <!-- <div class="portfolio-item"> -->
-                            <!-- <img src="assets/imgs/advertising-2.jpg" class="img-fluid" alt="Download free bootstrap 4 admin dashboard, free boootstrap 4 templates">                          -->
-                            <!-- <div class="content-holder"> -->
-                                <!-- <a class="img-popup" href="assets/imgs/advertising-2.jpg"></a> -->
-                                <!-- <div class="text-holder"> -->
-                                    <!-- <h6 class="title">ADVERSTISING</h6> -->
-                                    <!-- <p class="subtitle">Expedita corporis doloremque velit in totam!</p> -->
-                                <!-- </div> -->
-                            <!-- </div>     -->
-                        <!-- </div>               -->
-                    <!-- </div>  -->
-                    <!-- <div class="col-md-6 col-lg-4 web"> -->
-                        <!-- <div class="portfolio-item"> -->
-                            <!-- <img src="assets/imgs/web-4.jpg" class="img-fluid" alt="Download free bootstrap 4 admin dashboard, free boootstrap 4 templates"> -->
-                            <!-- <div class="content-holder"> -->
-                                <!-- <a class="img-popup" href="assets/imgs/web-4.jpg"></a> -->
-                                <!-- <div class="text-holder"> -->
-                                    <!-- <h6 class="title">WEB</h6> -->
-                                    <!-- <p class="subtitle">Expedita corporis doloremque velit in totam!</p> -->
-                                <!-- </div> -->
-                            <!-- </div> -->
-                        <!-- </div>                                                      -->
-                    <!-- </div> -->
-<!--  -->
-                    <!-- <div class="col-md-6 col-lg-4 advertising">  -->
-                        <!-- <div class="portfolio-item"> -->
-                            <!-- <img src="assets/imgs/advertising-1.jpg" class="img-fluid" alt="Download free bootstrap 4 admin dashboard, free boootstrap 4 templates">                                -->
-                            <!-- <div class="content-holder"> -->
-                                <!-- <a class="img-popup" href="assets/imgs/advertising-1.jpg"></a> -->
-                                <!-- <div class="text-holder"> -->
-                                    <!-- <h6 class="title">ADVERSITING</h6> -->
-                                    <!-- <p class="subtitle">Expedita corporis doloremque velit in totam!</p> -->
-                                <!-- </div> -->
-                            <!-- </div> -->
-                        <!-- </div>                                                        -->
-                    <!-- </div>  -->
-                    <!-- <div class="col-md-6 col-lg-4 web new"> -->
-                        <!-- <div class="portfolio-item"> -->
-                            <!-- <img src="assets/imgs/web-3.jpg" class="img-fluid" alt="Download free bootstrap 4 admin dashboard, free boootstrap 4 templates">   -->
-                           <!-- <div class="content-holder"> -->
-                                <!-- <a class="img-popup" href="assets/imgs/web-3.jpg"></a> -->
-                                <!-- <div class="text-holder"> -->
-                                    <!-- <h6 class="title">WEB</h6> -->
-                                    <!-- <p class="subtitle">Expedita corporis doloremque velit in totam!</p> -->
-                                <!-- </div> -->
-                            <!-- </div> -->
-                        <!-- </div>                                                      -->
-                    <!-- </div> -->
-                    <!-- <div class="col-md-6 col-lg-4 advertising new"> -->
-                        <!-- <div class="portfolio-item"> -->
-                            <!-- <img src="assets/imgs/advertising-3.jpg" class="img-fluid" alt="Download free bootstrap 4 admin dashboard, free boootstrap 4 templates">        -->
-                           <!-- <div class="content-holder"> -->
-                                <!-- <a class="img-popup" href="assets/imgs/advertising-3.jpg"></a> -->
-                                <!-- <div class="text-holder"> -->
-                                    <!-- <h6 class="title">ADVERSITING</h6> -->
-                                    <!-- <p class="subtitle">Expedita corporis doloremque velit in totam!</p> -->
-                                <!-- </div> -->
-                            <!-- </div> -->
-                        <!-- </div>                                                        -->
-                    <!-- </div>  -->
-                    <!-- <div class="col-md-6 col-lg-4 advertising new">  -->
-                        <!-- <div class="portfolio-item"> -->
-                            <!-- <img src="assets/imgs/advertising-4.jpg" class="img-fluid" alt="Download free bootstrap 4 admin dashboard, free boootstrap 4 templates">             -->
-                            <!-- <div class="content-holder"> -->
-                                <!-- <a class="img-popup" href="assets/imgs/advertising-4.jpg"></a> -->
-                                <!-- <div class="text-holder"> -->
-                                    <!-- <h6 class="title">ADVERTISING</h6> -->
-                                    <!-- <p class="subtitle">Expedita corporis doloremque velit in totam!</p> -->
-                                <!-- </div> -->
-                            <!-- </div> -->
-                        <!-- </div> -->
-                                
-                    <!-- </div>  -->
-                    <!-- <div class="col-md-6 col-lg-4 branding new"> -->
-                        <!-- <div class="portfolio-item"> -->
-                            <!-- <img src="assets/imgs/branding-1.jpg" class="img-fluid" alt="Download free bootstrap 4 admin dashboard, free boootstrap 4 templates">                         -->
-                            <!-- <div class="content-holder"> -->
-                                <!-- <a class="img-popup" href="assets/imgs/branding-1.jpg"></a> -->
-                                <!-- <div class="text-holder"> -->
-                                    <!-- <h6 class="title">BRANDING</h6> -->
-                                    <!-- <p class="subtitle">Expedita corporis doloremque velit in totam!</p> -->
-                                <!-- </div> -->
-                            <!-- </div>  -->
-                        <!-- </div> -->
-                    <!-- </div>  -->
-                    <!-- <div class="col-md-6 col-lg-4 branding"> -->
-                        <!-- <div class="portfolio-item"> -->
-                            <!-- <img src="assets/imgs/branding-2.jpg" class="img-fluid" alt="Download free bootstrap 4 admin dashboard, free boootstrap 4 templates">   -->
-                            <!-- <div class="content-holder"> -->
-                                <!-- <a class="img-popup" href="assets/imgs/branding-2.jpg"></a> -->
-                                <!-- <div class="text-holder"> -->
-                                    <!-- <h6 class="title">BRANDING</h6> -->
-                                    <!-- <p class="subtitle">Expedita corporis doloremque velit in totam!</p> -->
-                                <!-- </div> -->
-                            <!-- </div> -->
-                        <!-- </div>                                                      -->
-                    <!-- </div>  -->
-                    <!-- <div class="col-md-6 col-lg-4 branding new"> -->
-                        <!-- <div class="portfolio-item"> -->
-                            <!-- <img src="assets/imgs/branding-3.jpg" class="img-fluid" alt="Download free bootstrap 4 admin dashboard, free boootstrap 4 templates">    -->
-                            <!-- <div class="content-holder"> -->
-                                <!-- <a class="img-popup" href="assets/imgs/branding-3.jpg"></a> -->
-                                <!-- <div class="text-holder"> -->
-                                    <!-- <h6 class="title">BRANDING</h6> -->
-                                    <!-- <p class="subtitle">Expedita corporis doloremque velit in totam!</p> -->
-                                <!-- </div> -->
-                            <!-- </div> -->
-                        <!-- </div>                                                     -->
-                    <!-- </div>  -->
-                    <!-- <div class="col-md-6 col-lg-4 branding"> -->
-                        <!-- <div class="portfolio-item"> -->
-                            <!-- <img src="assets/imgs/branding-4.jpg" class="img-fluid" alt="Download free bootstrap 4 admin dashboard, free boootstrap 4 templates">                       -->
-                            <!-- <div class="content-holder"> -->
-                                <!-- <a class="img-popup" href="assets/imgs/branding-4.jpg"></a> -->
-                                <!-- <div class="text-holder"> -->
-                                    <!-- <h6 class="title">BRANDING</h6> -->
-                                    <!-- <p class="subtitle">Expedita corporis doloremque velit in totam!</p> -->
-                                <!-- </div> -->
-                            <!-- </div> -->
-                        <!-- </div>                                                       -->
-                    <!-- </div>  -->
-                    <!-- <div class="col-md-6 col-lg-4 branding"> -->
-                        <!-- <div class="portfolio-item"> -->
-                            <!-- <img src="assets/imgs/branding-5.jpg" class="img-fluid" alt="Download free bootstrap 4 admin dashboard, free boootstrap 4 templates">           -->
-                            <!-- <div class="content-holder"> -->
-                                <!-- <a class="img-popup" href="assets/imgs/branding-5.jpg"></a> -->
-                                <!-- <div class="text-holder"> -->
-                                    <!-- <h6 class="title">BRANDING</h6> -->
-                                    <!-- <p class="subtitle">Expedita corporis doloremque velit in totam!</p> -->
-                                <!-- </div> -->
-                            <!-- </div> -->
-                        <!-- </div>                                                    -->
-                    <!-- </div> -->
-                <!-- </div>  -->
-            <!-- </div>   -->
-        <!-- </div>             -->
-    <!-- </section> -->
-    <!-- End of portfolio section -->
-
-    <!-- <section class="section" id="blog"> -->
-        <!-- <div class="container"> -->
-            <!-- <h2 class="mb-5">Latest <span class="text-danger">News</span></h2> -->
-            <!-- <div class="row"> -->
-                <!-- <div class="blog-card"> -->
-                    <!-- <div class="img-holder"> -->
-                        <!-- <img src="assets/imgs/blog1.jpg" alt="Download free bootstrap 4 landing page, free boootstrap 4 templates, Download free bootstrap 4.1 landing page, free boootstrap 4.1.1 templates, meyawo Landing page"> -->
-                    <!-- </div> -->
-                    <!-- <div class="content-holder"> -->
-                        <!-- <h6 class="title">Consectetur adipisicing elit</h6> -->
-<!--  -->
-                        <!-- <p class="post-details"> -->
-                            <!-- <a href="#">By: Admin</a> -->
-                            <!-- <a href="#"><i class="ti-heart text-danger"></i> 234</a> -->
-                            <!-- <a href="#"><i class="ti-comment"></i> 123</a> -->
-                        <!-- </p> -->
-                        <!--  -->
-                        <!-- <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet nesciunt qui sit velit delectus voluptates, repellat ipsum culpa id deleniti. Rerum debitis facilis accusantium neque numquam mollitia modi quasi distinctio.</p> -->
-<!--  -->
-                        <!-- <p><b>Necessitatibus nihil impedit! Ex nisi eveniet, dolor aliquid consequuntur repudiandae.</b></p> -->
-                        <!-- <p>Magnam in repellat enim harum omnis aperiam! Explicabo illo, commodi, dolor blanditiis cupiditate harum nisi vero accusamus laudantium voluptatibus dolores quae obcaecati.</p> -->
-<!--  -->
-                        <!-- <a href="#" class="read-more">Read more <i class="ti-angle-double-right"></i></a> -->
-                    <!-- </div> -->
-                <!-- </div>end of blog wrapper -->
-<!--  -->
-                <!-- blog-card -->
-                <!-- <div class="blog-card"> -->
-                    <!-- <div class="img-holder"> -->
-                        <!-- <img src="assets/imgs/blog2.jpg" alt="Download free bootstrap 4 landing page, free boootstrap 4 templates, Download free bootstrap 4.1 landing page, free boootstrap 4.1.1 templates, meyawo Landing page"> -->
-                    <!-- </div> -->
-                    <!-- <div class="content-holder"> -->
-                        <!-- <h6 class="title">Explicabo illo</h6> -->
-<!--  -->
-                        <!-- <p class="post-details"> -->
-                            <!-- <a href="#">By: Admin</a> -->
-                            <!-- <a href="#"><i class="ti-heart text-danger"></i> 456</a> -->
-                            <!-- <a href="#"><i class="ti-comment"></i> 264</a> -->
-                        <!-- </p> -->
-                        <!--  -->
-                        <!-- <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit excepturi laborum enim, vitae ipsam atque eum, ad iusto consequuntur voluptas, esse doloribus. Perferendis porro quisquam vitae exercitationem aliquid, minus eos laborum repudiandae, cumque debitis iusto omnis praesentium? Laborum placeat sit adipisci illum tempore maxime, esse qui quae? Molestias excepturi corporis similique doloribus. Esse vitae earum architecto nulla non dolores illum at perspiciatis quod, et deleniti cupiditate reiciendis harum facere, delectus eum commodi soluta distinctio sit repudiandae possimus sunt. Ipsum, rem.</p> -->
-<!--  -->
-                        <!-- <a href="#" class="read-more">Read more <i class="ti-angle-double-right"></i></a> -->
-                    <!-- </div> -->
-                <!-- </div>end of blog wrapper -->
-                <!-- blog-card -->
-                <!-- <div class="blog-card"> -->
-                    <!-- <div class="img-holder"> -->
-                        <!-- <img src="assets/imgs/blog3.jpg" alt="Download free bootstrap 4 landing page, free boootstrap 4 templates, Download free bootstrap 4.1 landing page, free boootstrap 4.1.1 templates, meyawo Landing page"> -->
-                    <!-- </div> -->
-                    <!-- <div class="content-holder"> -->
-                        <!-- <h4 class="title">Porro Quisqua</h4> -->
-<!--  -->
-                        <!-- <p class="post-details"> -->
-                            <!-- <a href="#">By: Admin</a> -->
-                            <!-- <a href="#"><i class="ti-heart text-danger"></i> 431</a> -->
-                            <!-- <a href="#"><i class="ti-comment"></i> 312</a> -->
-                        <!-- </p> -->
-                        <!--  -->
-                        <!-- <p> consectetur adipisicing elit. Impedit excepturi laborum enim, vitae ipsam atque eum, ad iusto consequuntur voluptas, esse doloribus. Perferendis porro quisquam vitae exercitationem aliquid, minus eos laborum repudiandae, cumque debitis iusto omnis praesentium? Laborum placeat sit adipisci illum tempore maxime, esse qui quae? Molestias excepturi corporis similique doloribus. Esse vitae earum architecto nulla non dolores illum at perspiciatis quod, et deleniti cupiditate reiciendis harum facere, delectus eum commodi soluta distinctio sit repudiandae possimus sunt. Ipsum, rem.</p> -->
-<!--  -->
-                        <!-- <a href="#" class="read-more">Read more <i class="ti-angle-double-right"></i></a> -->
-                    <!-- </div> -->
-                <!-- </div>end of blog wrapper -->
-<!--  -->
-            <!-- </div> -->
-        <!-- </div> -->
-    <!-- </section> -->
-
-    <div class="section contact" id="contact">
-        <div id="map" class="map"></div>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8">
-                    <div class="contact-form-card">
-                        <h4 class="contact-title" id="lax4">Send a message</h4>
-                        <form action="">
-                            <div class="form-group">
-                                <input  class="form-control" type="text" placeholder="Name *" required>
-                            </div>
-                            <div class="form-group">
-                                <input class="form-control" type="email" placeholder="Email *" required>
-                            </div>
-                            <div class="form-group">
-                                <textarea class="form-control" id=" placeholder="Message *" rows="7" required></textarea>
-                            </div>
-                            <div class="form-group ">
-                                <button type="submit" class="form-control btn btn-primary" >Send Message</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="contact-info-card">
-                        <h4 class="contact-title" id="lax4">Get in touch</h4>
-                        <div class="row mb-2">
-                            <div class="col-1 pt-1 mr-1">
-                                <i class="ti-mobile icon-md"></i>
-                            </div>
-                            <div class="col-10 ">
-                                <h6 class="d-inline">Phone : <br> <span class="text-muted">+ (977) 9765461633</span></h6>
-                            </div>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col-1 pt-1 mr-1">
-                                <i class="ti-map-alt icon-md"></i>
-                            </div>
-                            <div class="col-10">
-                                <h6 class="d-inline">Address :<br> <span class="text-muted">Kathmandu,Nepal</span></h6>
-                            </div>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col-1 pt-1 mr-1">
-                                <i class="ti-envelope icon-md"></i>
-                            </div>
-                            <div class="col-10">
-                                <h6 class="d-inline">Email :<br> <span class="text-muted">laxmankhatri568@gmail.com</span></h6>
-                            </div>
-                        </div>
-                        <ul class="social-icons pt-4">
-                            <li class="social-item"><a class="social-link text-dark" href="https://www.facebook.com/laxman.khatri.328" target="_blank"><i class="ti-facebook" aria-hidden="true"></i></a></li>
-                            <!-- <li class="social-item"><a class="social-link text-dark" href="#"><i class="ti-twitter" aria-hidden="true"></i></a></li> -->
-                            <!-- <li class="social-item"><a class="social-link text-dark" href="#"><i class="ti-google" aria-hidden="true"></i></a></li> -->
-                            <li class="social-item"><a class="social-link text-dark" href="https://www.instagram.com/laxmankhatri328/" target="_blank"><i class="ti-instagram" aria-hidden="true"></i></a></li>
-                            <li class="social-item"><a class="social-link text-dark" href="https://github.com/melaxman" target="_blank"><i class="ti-github" aria-hidden="true"></i></a></li>
-                        </ul> 
-                    </div>
-                </div>
-            </div>
-
-        </div>
+    <div class="hero-eyebrow" id="h-ey">Hello, I'm</div>
+    <h1 class="hero-name" id="h-name">
+      Laxman <span class="gradient">Khatri</span>
+    </h1>
+    <p class="hero-role" id="h-role">Software Engineer · Full Stack Developer</p>
+    <p class="hero-desc" id="h-desc">
+      Building scalable web applications and IoT systems with Python, JavaScript, React, and Next.js.
+      Based in Kathmandu, Nepal — passionate about clean code and great user experiences.
+    </p>
+    <div class="hero-cta" id="h-cta">
+      <a href="#projects" class="btn btn-primary">View my work →</a>
+      <a href="mailto:laxmankhatri568@gmail.com" class="btn btn-outline">Get in touch</a>
     </div>
-    <footer class="footer py-3">
-        <div class="container">
-            <p class="small mb-0 text-light">
-                &copy; <script>document.write(new Date().getFullYear())</script> Created With <i class="ti-heart text-danger"></i> By <a href="http://devcrud.com" target="_blank"><span class="text-danger" title="Bootstrap 4 Themes and Dashboards">Laxman Khatri</span></a> 
-            </p>
+    <div class="scroll-hint">
+      <span>scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ══ ABOUT ══ -->
+  <section id="about">
+    <div class="section-label">About me</div>
+    <h2 class="section-title">Dedicated to building<br>things that matter.</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>I'm Laxman Khatri, a Software Engineer in my final year of B.E. Software Engineering at Nepal College of Information and Technology (NCIT). I specialise in building full-stack web applications and have a growing passion for AI/ML integration.</p>
+        <p>My toolkit spans Python, JavaScript, React, Next.js, FastAPI, Node.js, Django, and cloud services on AWS. I care equally about the front-end experience and the back-end architecture that powers it.</p>
+        <p>When I'm not coding, you'll find me exploring Nepal's mountains — like Rara Lake in the photo — or contributing to open-source projects.</p>
+        <div style="margin-top: 1.8rem; display: flex; gap: 1rem;">
+          <a href="https://github.com/melaxman" class="btn btn-outline" style="font-size:0.82rem; padding: 0.6rem 1.2rem;" target="_blank">GitHub ↗</a>
+          <a href="https://www.linkedin.com/in/laxman-khatri/" class="btn btn-outline" style="font-size:0.82rem; padding: 0.6rem 1.2rem;" target="_blank">LinkedIn ↗</a>
+          <a href="https://khatrilaxman.com.np" class="btn btn-outline" style="font-size:0.82rem; padding: 0.6rem 1.2rem;" target="_blank">Website ↗</a>
         </div>
-    </footer>
+      </div>
+      <div class="about-photo">
+        <!-- 
+          REPLACE src with your actual photo path in the repo, e.g. assets/imgs/lax2.jpg
+          or use the Rara Lake photo: assets/imgs/rara.jpg
+        -->
+        <img src="https://khatrilaxman.com.np/assets/imgs/lax2.jpg" alt="Laxman Khatri at Rara Lake" />
+        <div class="about-photo-caption">
+          <div class="location">📍 Rara National Park</div>
+          <div class="lake">Rara Lake, Nepal</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-	<!-- core  -->
-    <script src="assets/vendors/jquery/jquery-3.4.1.js"></script>
-    <script src="assets/vendors/bootstrap/bootstrap.bundle.js"></script>
+  <!-- ══ STATS ══ -->
+  <section style="padding-top: 0; padding-bottom: 0; max-width: 1100px; margin: 0 auto; padding-left: 2.5rem; padding-right: 2.5rem;">
+    <div class="stats-strip">
+      <div class="stat-box">
+        <div class="stat-num">4.0</div>
+        <div class="stat-label">Semester GPA</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">3+</div>
+        <div class="stat-label">Projects Shipped</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">4</div>
+        <div class="stat-label">Live Hosted Sites</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">2</div>
+        <div class="stat-label">AWS Certifications</div>
+      </div>
+    </div>
+  </section>
 
-    <!-- bootstrap 3 affix -->
-    <script src="assets/vendors/bootstrap/bootstrap.affix.js"></script>
+  <!-- ══ SKILLS ══ -->
+  <section id="skills">
+    <div class="section-label">Technical skills</div>
+    <h2 class="section-title">Tools I work with.</h2>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-cat">Languages</div>
+        <h3>Core Languages</h3>
+        <div class="skill-tags">
+          <span class="tag">Python</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">SQL</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-cat">Frontend</div>
+        <h3>Frontend Development</h3>
+        <div class="skill-tags">
+          <span class="tag">React.js</span>
+          <span class="tag">Next.js</span>
+          <span class="tag purple">Flutter</span>
+          <span class="tag">HTML/CSS</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-cat">Backend</div>
+        <h3>Backend Development</h3>
+        <div class="skill-tags">
+          <span class="tag">Node.js</span>
+          <span class="tag purple">FastAPI</span>
+          <span class="tag purple">Django</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-cat">Database</div>
+        <h3>Data & Storage</h3>
+        <div class="skill-tags">
+          <span class="tag">PostgreSQL</span>
+          <span class="tag">MySQL</span>
+          <span class="tag green">SQLAlchemy</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-cat">Cloud & DevOps</div>
+        <h3>Cloud & Infrastructure</h3>
+        <div class="skill-tags">
+          <span class="tag green">AWS</span>
+          <span class="tag green">Docker</span>
+          <span class="tag">GitHub</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-cat">AI / ML</div>
+        <h3>Machine Learning</h3>
+        <div class="skill-tags">
+          <span class="tag purple">TensorFlow</span>
+          <span class="tag purple">Keras</span>
+          <span class="tag">Streamlit</span>
+          <span class="tag">LSTM</span>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <!-- Isotope  -->
-    <script src="assets/vendors/isotope/isotope.pkgd.js"></script>
-    
-    <!-- Google mpas -->
-    <!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCtme10pzgKSPeJVJrG1O3tjR6lk98o4w8&callback=initMap"></script> -->
+  <!-- ══ EXPERIENCE ══ -->
+  <section id="experience">
+    <div class="section-label">Experience</div>
+    <h2 class="section-title">Where I've worked.</h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-date">Dec 2025 — Feb 2026</div>
+        <div class="timeline-role">Frontend Developer</div>
+        <div class="timeline-company">BG Techs · Internship</div>
+        <p class="timeline-desc">Built Customer, Freelancer, and Admin portals using Next.js with role-based authentication and payment integration. Delivered responsive, user-friendly interfaces for bglens.com and work.bglens.com.</p>
+        <div class="skill-tags" style="margin-top: 0.8rem;">
+          <span class="tag">Next.js</span>
+          <span class="tag">Role-based Auth</span>
+          <span class="tag">Payment Integration</span>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <!-- JohnDoe js -->
-    <script src="assets/js/johndoe.js"></script>
+  <!-- ══ PROJECTS ══ -->
+  <section id="projects">
+    <div class="section-label">Selected projects</div>
+    <h2 class="section-title">Things I've built.</h2>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <div class="glow"></div>
+        <div class="project-num">01 / Featured</div>
+        <h3>Breath Safe — IoT Air Quality Monitor</h3>
+        <p>A full-stack IoT application for monitoring, analysing, and forecasting air quality. Combines sensor data, weather APIs, and AI models to deliver real-time and predictive insights.</p>
+        <div class="project-stack">
+          <span class="tag">TensorFlow</span>
+          <span class="tag">React</span>
+          <span class="tag purple">Django</span>
+          <span class="tag green">IoT</span>
+        </div>
+        <a href="https://github.com/melaxman" class="project-link" target="_blank">View on GitHub →</a>
+      </div>
+
+      <div class="project-card alt">
+        <div class="glow"></div>
+        <div class="project-num">02 / Deep Learning</div>
+        <h3>Image Captioning System</h3>
+        <p>An end-to-end image captioning pipeline using CNN-based feature extraction and an LSTM decoder to generate natural-language descriptions of images.</p>
+        <div class="project-stack">
+          <span class="tag purple">TensorFlow</span>
+          <span class="tag purple">Keras</span>
+          <span class="tag">Python</span>
+          <span class="tag">Streamlit</span>
+        </div>
+        <a href="https://github.com/melaxman" class="project-link" target="_blank">View on GitHub →</a>
+      </div>
+
+      <div class="project-card">
+        <div class="glow"></div>
+        <div class="project-num">03 / Full Stack</div>
+        <h3>College Management System</h3>
+        <p>A comprehensive web app to manage students, departments, and enrolments with OAuth2 JWT authentication, containerised deployment, and a clean user-friendly frontend.</p>
+        <div class="project-stack">
+          <span class="tag purple">FastAPI</span>
+          <span class="tag">SQLAlchemy</span>
+          <span class="tag">PostgreSQL</span>
+          <span class="tag green">Docker</span>
+        </div>
+        <a href="https://github.com/melaxman" class="project-link" target="_blank">View on GitHub →</a>
+      </div>
+
+      <div class="project-card alt">
+        <div class="glow"></div>
+        <div class="project-num">04 / Research</div>
+        <h3>IoT-based AQI Forecasting Paper</h3>
+        <p>Published at the International Conference on Innovation in Computing, Science, Engineering and Technology (ICICSET 2025). Covers IoT sensor integration with ML-driven forecasting models.</p>
+        <div class="project-stack">
+          <span class="tag purple">Machine Learning</span>
+          <span class="tag green">IoT</span>
+          <span class="tag">Research</span>
+        </div>
+        <span class="project-link" style="cursor:default; opacity:0.6;">ICICSET 2025 Publication</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ HOSTED PROJECTS ══ -->
+  <section id="hosted" style="padding-top: 0;">
+    <div class="section-label">Live on the web</div>
+    <h2 class="section-title" style="margin-bottom: 2rem;">Hosted projects.</h2>
+    <div class="hosted-grid">
+      <a class="hosted-card" href="https://bglens.com" target="_blank">
+        <div><div class="name">BG Lens</div><div class="url">bglens.com · work.bglens.com</div></div>
+        <span class="hosted-arrow">→</span>
+      </a>
+      <a class="hosted-card" href="https://omkayakalpa.com" target="_blank">
+        <div><div class="name">Om KayaKalpa</div><div class="url">omkayakalpa.com</div></div>
+        <span class="hosted-arrow">→</span>
+      </a>
+      <a class="hosted-card" href="https://bookswritingnepal.com" target="_blank">
+        <div><div class="name">Books Writing Nepal</div><div class="url">bookswritingnepal.com</div></div>
+        <span class="hosted-arrow">→</span>
+      </a>
+      <a class="hosted-card" href="https://vergeinfotech.com" target="_blank">
+        <div><div class="name">Verge Info Tech</div><div class="url">vergeinfotech.com</div></div>
+        <span class="hosted-arrow">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ══ EDUCATION ══ -->
+  <section id="education">
+    <div class="section-label">Education</div>
+    <h2 class="section-title">My academic journey.</h2>
+    <div class="edu-grid">
+      <div class="edu-card">
+        <div class="edu-badge">2022 – 2026</div>
+        <h3>Bachelor of Software Engineering</h3>
+        <div class="edu-school">Nepal College of Information and Technology (NCIT) · Pokhara University</div>
+        <div class="edu-gpa">GPA 4.00 (6th Semester) · 8th Semester (Current)</div>
+      </div>
+      <div class="edu-card">
+        <div class="edu-badge">2019 – 2021</div>
+        <h3>+2 Science (NEB)</h3>
+        <div class="edu-school">Eager Bridge Secondary Boarding School</div>
+        <div class="edu-gpa">GPA 3.63</div>
+      </div>
+      <div class="edu-card">
+        <div class="edu-badge">2019 Batch</div>
+        <h3>Secondary Education (SEE)</h3>
+        <div class="edu-school">Eager Bridge Secondary Boarding School · NEB Board</div>
+        <div class="edu-gpa">GPA 4.00</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CERTIFICATIONS ══ -->
+  <section id="certifications" style="padding-top: 0;">
+    <div class="section-label">Certifications</div>
+    <h2 class="section-title" style="margin-bottom: 2rem;">Credentials & achievements.</h2>
+    <div class="cert-list">
+      <div class="cert-item">
+        <div class="cert-icon">☁️</div>
+        <div class="cert-title">AWS Academy Graduate — Cloud Foundations</div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-icon">🏗️</div>
+        <div class="cert-title">AWS Academy Graduate — Cloud Architecting (Training Badge)</div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-icon">📄</div>
+        <div class="cert-title">Research Paper — ICICSET 2025: IoT-based AQI Forecasting</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CONTACT ══ -->
+  <section id="contact">
+    <div class="section-label">Get in touch</div>
+    <h2 class="section-title">Let's build something<br>together.</h2>
+    <p class="contact-intro">I'm currently open to new opportunities — whether it's a full-time role, freelance project, or just a chat about tech. My inbox is always open.</p>
+    <div class="contact-links">
+      <a href="mailto:laxmankhatri568@gmail.com" class="contact-link">✉ Email me</a>
+      <a href="https://www.linkedin.com/in/laxman-khatri/" class="contact-link" target="_blank">in LinkedIn</a>
+      <a href="https://github.com/melaxman" class="contact-link" target="_blank">⌥ GitHub</a>
+      <a href="tel:+9779765461633" class="contact-link">✆ +977 9765461633</a>
+    </div>
+    <a href="mailto:laxmankhatri568@gmail.com" class="btn btn-primary" style="font-size: 1rem; padding: 1rem 2.5rem;">Say hello →</a>
+  </section>
+
+  <footer>
+    <p>Designed &amp; built by <strong>Laxman Khatri</strong> · Kathmandu, Nepal · 2026</p>
+  </footer>
+
+</div><!-- /wrap -->
+
+<!-- ══ THREE.JS BACKGROUND ══ -->
+<script>
+(function() {
+  const canvas = document.getElementById('bg-canvas');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x000000, 0);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 200);
+  camera.position.z = 40;
+
+  // Particle field
+  const count = 2200;
+  const positions = new Float32Array(count * 3);
+  const colors = new Float32Array(count * 3);
+  const palette = [
+    [0.388, 0.702, 0.929], // blue
+    [0.392, 0.827, 0.569], // green
+    [0.627, 0.478, 0.918], // purple
+  ];
+  for (let i = 0; i < count; i++) {
+    positions[i * 3]     = (Math.random() - 0.5) * 120;
+    positions[i * 3 + 1] = (Math.random() - 0.5) * 80;
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 80;
+    const c = palette[Math.floor(Math.random() * palette.length)];
+    colors[i * 3]     = c[0];
+    colors[i * 3 + 1] = c[1];
+    colors[i * 3 + 2] = c[2];
+  }
+
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+  const mat = new THREE.PointsMaterial({
+    size: 0.18,
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.65,
+    sizeAttenuation: true,
+  });
+
+  const points = new THREE.Points(geo, mat);
+  scene.add(points);
+
+  // Connecting lines (sparse)
+  const lineMat = new THREE.LineBasicMaterial({ color: 0x63b3ed, transparent: true, opacity: 0.04 });
+  const lineGeo = new THREE.BufferGeometry();
+  const linePositions = [];
+  for (let i = 0; i < 120; i++) {
+    const a = Math.floor(Math.random() * count);
+    const b = Math.floor(Math.random() * count);
+    linePositions.push(
+      positions[a * 3], positions[a * 3 + 1], positions[a * 3 + 2],
+      positions[b * 3], positions[b * 3 + 1], positions[b * 3 + 2]
+    );
+  }
+  lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
+  const lines = new THREE.LineSegments(lineGeo, lineMat);
+  scene.add(lines);
+
+  // Mouse parallax
+  let mouseX = 0, mouseY = 0;
+  document.addEventListener('mousemove', e => {
+    mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+    mouseY = -(e.clientY / window.innerHeight - 0.5) * 2;
+  });
+
+  // Scroll
+  let scrollY = 0;
+  window.addEventListener('scroll', () => { scrollY = window.scrollY; });
+
+  let animId;
+  function animate(t) {
+    animId = requestAnimationFrame(animate);
+    const time = t * 0.001;
+
+    points.rotation.y = time * 0.018 + mouseX * 0.05;
+    points.rotation.x = time * 0.010 + mouseY * 0.03;
+    lines.rotation.y = points.rotation.y;
+    lines.rotation.x = points.rotation.x;
+
+    camera.position.y = -scrollY * 0.012;
+
+    renderer.render(scene, camera);
+  }
+
+  // Pause when tab hidden
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) cancelAnimationFrame(animId);
+    else animate(0);
+  });
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  animate(0);
+})();
+</script>
+
+<!-- ══ GSAP ANIMATIONS ══ -->
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+// Hero entrance
+const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+tl.to('#hero-badge', { opacity: 1, y: 0, duration: 0.6 }, 0.3)
+  .to('.hero-eyebrow', { opacity: 1, y: 0, duration: 0.7 }, 0.5)
+  .to('.hero-name',    { opacity: 1, y: 0, duration: 0.9 }, 0.7)
+  .to('.hero-role',    { opacity: 1, y: 0, duration: 0.7 }, 0.9)
+  .to('.hero-desc',    { opacity: 1, y: 0, duration: 0.7 }, 1.05)
+  .to('.hero-cta',     { opacity: 1, y: 0, duration: 0.7 }, 1.2);
+
+// Timeline items
+gsap.utils.toArray('.timeline-item').forEach((el, i) => {
+  gsap.to(el, {
+    opacity: 1, x: 0, duration: 0.7, ease: 'power3.out',
+    scrollTrigger: { trigger: el, start: 'top 85%' },
+    delay: i * 0.12,
+  });
+});
+
+// Project cards
+gsap.utils.toArray('.project-card').forEach((el, i) => {
+  gsap.to(el, {
+    opacity: 1, y: 0, duration: 0.7, ease: 'power3.out',
+    scrollTrigger: { trigger: el, start: 'top 88%' },
+    delay: i * 0.1,
+  });
+});
+
+// Skill cards
+gsap.utils.toArray('.skill-card').forEach((el, i) => {
+  gsap.from(el, {
+    opacity: 0, y: 20, duration: 0.5, ease: 'power2.out',
+    scrollTrigger: { trigger: el, start: 'top 90%' },
+    delay: i * 0.07,
+  });
+});
+
+// Section titles
+gsap.utils.toArray('.section-title').forEach(el => {
+  gsap.from(el, {
+    opacity: 0, y: 24, duration: 0.8, ease: 'power3.out',
+    scrollTrigger: { trigger: el, start: 'top 88%' },
+  });
+});
+
+// Nav scroll effect
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// Cursor glow on project cards
+document.querySelectorAll('.project-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    card.querySelector('.glow').style.transform = `translate(${x - 100}px, ${y - 100}px)`;
+  });
+});
+</script>
 
 </body>
 </html>
