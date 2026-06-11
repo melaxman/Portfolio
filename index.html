@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Laxman Khatri — Software Engineer</title>
+  <link rel="icon" type="image/x-icon" href="lax.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -28,9 +29,7 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { scroll-behavior: smooth; }
-
     body {
       background: var(--bg);
       color: var(--text);
@@ -73,13 +72,11 @@
       justify-content: space-between;
       transition: background 0.4s, backdrop-filter 0.4s;
     }
-
     nav.scrolled {
       background: rgba(8,12,20,0.85);
       backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
     }
-
     .nav-logo {
       font-family: var(--font-display);
       font-size: 1.3rem;
@@ -88,15 +85,12 @@
       text-decoration: none;
       letter-spacing: -0.02em;
     }
-
     .nav-logo span { color: var(--accent); }
-
     .nav-links {
       display: flex;
       gap: 2rem;
       list-style: none;
     }
-
     .nav-links a {
       font-family: var(--font-mono);
       font-size: 0.8rem;
@@ -107,7 +101,6 @@
       transition: color 0.2s;
       position: relative;
     }
-
     .nav-links a::after {
       content: '';
       position: absolute;
@@ -116,9 +109,40 @@
       background: var(--accent);
       transition: width 0.3s;
     }
-
     .nav-links a:hover { color: var(--accent); }
     .nav-links a:hover::after { width: 100%; }
+
+    /* ── TYPEWRITER INTRO ── */
+    #typewriter-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .tw-line {
+      font-family: var(--font-mono);
+      font-size: clamp(1.1rem, 3vw, 1.5rem);
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      width: 0;
+      letter-spacing: 0.04em;
+    }
+    .tw-line .accent { color: var(--accent); }
+    .tw-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1.2em;
+      background: var(--accent);
+      vertical-align: text-bottom;
+      animation: blink 0.8s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
 
     /* ── Hero ── */
     #hero {
@@ -129,8 +153,8 @@
       padding: 0 2.5rem;
       max-width: 1100px;
       margin: 0 auto;
+      position: relative;
     }
-
     .hero-eyebrow {
       font-family: var(--font-mono);
       font-size: 0.78rem;
@@ -141,7 +165,6 @@
       opacity: 0;
       transform: translateY(20px);
     }
-
     .hero-name {
       font-family: var(--font-display);
       font-size: clamp(3rem, 9vw, 7rem);
@@ -153,14 +176,12 @@
       opacity: 0;
       transform: translateY(30px);
     }
-
     .hero-name .gradient {
       background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, var(--accent3) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
-
     .hero-role {
       font-family: var(--font-display);
       font-size: clamp(1.1rem, 3vw, 1.8rem);
@@ -170,7 +191,6 @@
       opacity: 0;
       transform: translateY(20px);
     }
-
     .hero-desc {
       max-width: 540px;
       color: var(--muted);
@@ -180,7 +200,6 @@
       opacity: 0;
       transform: translateY(20px);
     }
-
     .hero-cta {
       display: flex;
       gap: 1rem;
@@ -188,7 +207,6 @@
       opacity: 0;
       transform: translateY(20px);
     }
-
     .btn {
       display: inline-flex;
       align-items: center;
@@ -203,24 +221,20 @@
       cursor: pointer;
       border: none;
     }
-
     .btn-primary {
       background: var(--accent);
       color: #080c14;
     }
-
     .btn-primary:hover {
       background: #90cdf4;
       transform: translateY(-2px);
       box-shadow: 0 8px 30px rgba(99,179,237,0.35);
     }
-
     .btn-outline {
       background: transparent;
       color: var(--text);
       border: 1px solid var(--border);
     }
-
     .btn-outline:hover {
       border-color: var(--accent);
       color: var(--accent);
@@ -240,7 +254,6 @@
       opacity: 0.4;
       animation: scrollBob 2s ease-in-out infinite;
     }
-
     .scroll-hint span {
       font-family: var(--font-mono);
       font-size: 0.65rem;
@@ -248,13 +261,11 @@
       text-transform: uppercase;
       color: var(--muted);
     }
-
     .scroll-line {
       width: 1px;
       height: 48px;
       background: linear-gradient(to bottom, var(--accent), transparent);
     }
-
     @keyframes scrollBob {
       0%, 100% { transform: translateX(-50%) translateY(0); }
       50% { transform: translateX(-50%) translateY(8px); }
@@ -266,7 +277,6 @@
       margin: 0 auto;
       padding: 6rem 2.5rem;
     }
-
     .section-label {
       font-family: var(--font-mono);
       font-size: 0.72rem;
@@ -278,7 +288,6 @@
       align-items: center;
       gap: 0.8rem;
     }
-
     .section-label::before {
       content: '';
       display: block;
@@ -286,7 +295,6 @@
       height: 1px;
       background: var(--accent);
     }
-
     .section-title {
       font-family: var(--font-display);
       font-size: clamp(1.8rem, 4vw, 2.8rem);
@@ -302,62 +310,47 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 4rem;
-      align-items: center;
+      align-items: start;
     }
-
     .about-text p {
       color: var(--muted);
       margin-bottom: 1.2rem;
       line-height: 1.8;
     }
 
+    /* ── FIXED PHOTO ── */
     .about-photo {
       position: relative;
+      display: flex;
+      justify-content: center;
     }
-
-    .about-photo img {
+    .about-photo-frame {
+      position: relative;
       width: 100%;
-      max-width: 380px;
-      border-radius: 12px;
-      display: block;
-      filter: grayscale(20%);
-      transition: filter 0.4s;
+      max-width: 360px;
     }
-
-    .about-photo:hover img { filter: grayscale(0%); }
-
-    .about-photo::before {
+    .about-photo-frame::before {
       content: '';
       position: absolute;
-      inset: -8px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      z-index: -1;
-      opacity: 0.3;
+      inset: -6px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, var(--accent3) 100%);
+      z-index: 0;
+      opacity: 0.4;
     }
-
-    .about-photo-caption {
-      position: absolute;
-      bottom: -1rem;
-      right: -1rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 0.8rem 1.2rem;
+    .about-photo-frame img {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+      object-position: center top;
+      border-radius: 14px;
+      display: block;
+      filter: grayscale(15%);
+      transition: filter 0.4s;
     }
-
-    .about-photo-caption .location {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      color: var(--accent);
-      letter-spacing: 0.1em;
-    }
-
-    .about-photo-caption .lake {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text);
-    }
+    .about-photo-frame:hover img { filter: grayscale(0%); }
 
     /* ── Skills ── */
     .skills-grid {
@@ -365,7 +358,6 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 1.5rem;
     }
-
     .skill-card {
       background: var(--card);
       border: 1px solid var(--border);
@@ -375,7 +367,6 @@
       overflow: hidden;
       transition: transform 0.3s, border-color 0.3s;
     }
-
     .skill-card::before {
       content: '';
       position: absolute;
@@ -386,10 +377,8 @@
       transform-origin: left;
       transition: transform 0.4s;
     }
-
     .skill-card:hover { transform: translateY(-4px); border-color: rgba(99,179,237,0.3); }
     .skill-card:hover::before { transform: scaleX(1); }
-
     .skill-cat {
       font-family: var(--font-mono);
       font-size: 0.68rem;
@@ -398,7 +387,6 @@
       text-transform: uppercase;
       margin-bottom: 0.8rem;
     }
-
     .skill-card h3 {
       font-family: var(--font-display);
       font-size: 1rem;
@@ -406,13 +394,11 @@
       color: #fff;
       margin-bottom: 1rem;
     }
-
     .skill-tags {
       display: flex;
       flex-wrap: wrap;
       gap: 0.4rem;
     }
-
     .tag {
       font-family: var(--font-mono);
       font-size: 0.7rem;
@@ -422,7 +408,6 @@
       border-radius: 4px;
       color: var(--accent);
     }
-
     .tag.purple { background: rgba(159,122,234,0.1); border-color: rgba(159,122,234,0.2); color: var(--accent2); }
     .tag.green { background: rgba(104,211,145,0.1); border-color: rgba(104,211,145,0.2); color: var(--accent3); }
 
@@ -431,7 +416,6 @@
       position: relative;
       padding-left: 2rem;
     }
-
     .timeline::before {
       content: '';
       position: absolute;
@@ -439,7 +423,6 @@
       width: 1px;
       background: linear-gradient(to bottom, var(--accent), transparent);
     }
-
     .timeline-item {
       position: relative;
       margin-bottom: 3rem;
@@ -447,7 +430,6 @@
       opacity: 0;
       transform: translateX(-20px);
     }
-
     .timeline-item::before {
       content: '';
       position: absolute;
@@ -459,7 +441,15 @@
       background: var(--accent);
       box-shadow: 0 0 12px var(--accent);
     }
-
+    .timeline-item.current::before {
+      background: var(--accent3);
+      box-shadow: 0 0 14px var(--accent3);
+      animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { box-shadow: 0 0 6px var(--accent3); }
+      50% { box-shadow: 0 0 18px var(--accent3); }
+    }
     .timeline-date {
       font-family: var(--font-mono);
       font-size: 0.72rem;
@@ -467,7 +457,7 @@
       letter-spacing: 0.1em;
       margin-bottom: 0.5rem;
     }
-
+    .timeline-item.current .timeline-date { color: var(--accent3); }
     .timeline-role {
       font-family: var(--font-display);
       font-size: 1.25rem;
@@ -475,18 +465,37 @@
       color: #fff;
       margin-bottom: 0.2rem;
     }
-
     .timeline-company {
       font-size: 0.9rem;
       color: var(--accent2);
       font-weight: 500;
       margin-bottom: 0.8rem;
     }
-
     .timeline-desc {
       color: var(--muted);
       line-height: 1.75;
       max-width: 580px;
+    }
+    .current-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(104,211,145,0.12);
+      border: 1px solid rgba(104,211,145,0.3);
+      color: var(--accent3);
+      margin-left: 0.6rem;
+      vertical-align: middle;
+    }
+    .current-badge-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--accent3);
+      animation: pulse 2s infinite;
     }
 
     /* ── Projects ── */
@@ -495,7 +504,6 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 1.5rem;
     }
-
     .project-card {
       background: var(--card);
       border: 1px solid var(--border);
@@ -507,13 +515,11 @@
       opacity: 0;
       transform: translateY(30px);
     }
-
     .project-card:hover {
       transform: translateY(-6px);
       border-color: rgba(99,179,237,0.3);
       box-shadow: 0 20px 60px rgba(0,0,0,0.4);
     }
-
     .project-card .glow {
       position: absolute;
       width: 200px; height: 200px;
@@ -521,12 +527,11 @@
       background: radial-gradient(circle, rgba(99,179,237,0.08) 0%, transparent 70%);
       top: -60px; right: -60px;
       pointer-events: none;
+      transition: transform 0.1s;
     }
-
     .project-card.alt .glow {
       background: radial-gradient(circle, rgba(159,122,234,0.08) 0%, transparent 70%);
     }
-
     .project-num {
       font-family: var(--font-mono);
       font-size: 0.65rem;
@@ -534,7 +539,6 @@
       letter-spacing: 0.15em;
       margin-bottom: 1rem;
     }
-
     .project-card h3 {
       font-family: var(--font-display);
       font-size: 1.2rem;
@@ -543,21 +547,23 @@
       margin-bottom: 0.8rem;
       line-height: 1.3;
     }
-
     .project-card p {
       color: var(--muted);
       font-size: 0.9rem;
       line-height: 1.7;
       margin-bottom: 1.5rem;
     }
-
     .project-stack {
       display: flex;
       flex-wrap: wrap;
       gap: 0.4rem;
       margin-bottom: 1.5rem;
     }
-
+    .project-links {
+      display: flex;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+    }
     .project-link {
       display: inline-flex;
       align-items: center;
@@ -569,8 +575,34 @@
       letter-spacing: 0.05em;
       transition: gap 0.2s;
     }
-
     .project-link:hover { gap: 0.7rem; }
+    .project-link.dim { color: var(--muted); cursor: default; opacity: 0.6; }
+
+    /* GitHub CTA Banner */
+    .github-cta {
+      margin-top: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      padding: 1.6rem 2rem;
+      background: linear-gradient(135deg, rgba(99,179,237,0.07) 0%, rgba(159,122,234,0.07) 100%);
+      border: 1px solid rgba(99,179,237,0.18);
+      border-radius: 12px;
+      flex-wrap: wrap;
+    }
+    .github-cta-text {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .github-cta-text span { color: var(--accent); }
+    .github-cta-sub {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 0.2rem;
+    }
 
     /* ── Education ── */
     .edu-grid {
@@ -578,7 +610,6 @@
       grid-template-columns: 1fr 1fr;
       gap: 1.5rem;
     }
-
     .edu-card {
       background: var(--card);
       border: 1px solid var(--border);
@@ -586,9 +617,7 @@
       padding: 2rem;
       transition: transform 0.3s, border-color 0.3s;
     }
-
     .edu-card:hover { transform: translateY(-4px); border-color: rgba(99,179,237,0.3); }
-
     .edu-badge {
       display: inline-block;
       font-family: var(--font-mono);
@@ -601,7 +630,6 @@
       color: var(--accent);
       margin-bottom: 1rem;
     }
-
     .edu-card h3 {
       font-family: var(--font-display);
       font-size: 1rem;
@@ -610,13 +638,11 @@
       margin-bottom: 0.3rem;
       line-height: 1.3;
     }
-
     .edu-school {
       font-size: 0.85rem;
       color: var(--muted);
       margin-bottom: 0.5rem;
     }
-
     .edu-gpa {
       font-family: var(--font-mono);
       font-size: 0.75rem;
@@ -629,7 +655,6 @@
       flex-direction: column;
       gap: 1rem;
     }
-
     .cert-item {
       display: flex;
       align-items: center;
@@ -639,10 +664,12 @@
       border: 1px solid var(--border);
       border-radius: 8px;
       transition: transform 0.2s, border-color 0.2s;
+      text-decoration: none;
     }
-
-    .cert-item:hover { transform: translateX(6px); border-color: rgba(99,179,237,0.3); }
-
+    .cert-item[href]:hover {
+      transform: translateX(6px);
+      border-color: rgba(99,179,237,0.3);
+    }
     .cert-icon {
       width: 36px; height: 36px;
       border-radius: 8px;
@@ -651,12 +678,25 @@
       font-size: 1rem;
       flex-shrink: 0;
     }
-
+    .cert-body { flex: 1; }
     .cert-title {
       font-size: 0.9rem;
       font-weight: 600;
       color: var(--text);
     }
+    .cert-link-label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--accent);
+      margin-top: 0.15rem;
+    }
+    .cert-arrow {
+      color: var(--accent);
+      font-size: 1rem;
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    .cert-item[href]:hover .cert-arrow { transform: translateX(4px); }
 
     /* ── Hosted ── */
     .hosted-grid {
@@ -664,7 +704,6 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 1rem;
     }
-
     .hosted-card {
       display: flex;
       align-items: center;
@@ -677,48 +716,78 @@
       text-decoration: none;
       transition: all 0.25s;
     }
-
     .hosted-card:hover {
       border-color: var(--accent);
       transform: translateY(-3px);
       box-shadow: 0 8px 30px rgba(0,0,0,0.3);
     }
-
     .hosted-card .name {
       font-weight: 600;
       color: var(--text);
       font-size: 0.9rem;
     }
-
     .hosted-card .url {
       font-family: var(--font-mono);
       font-size: 0.68rem;
       color: var(--muted);
     }
-
     .hosted-arrow {
       color: var(--accent);
       font-size: 1rem;
       transition: transform 0.2s;
     }
-
     .hosted-card:hover .hosted-arrow { transform: translateX(4px); }
 
-    /* ── Contact ── */
-    #contact {
-      text-align: center;
+    /* Hosted GitHub CTA */
+    .hosted-github-cta {
+      margin-top: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.2rem 1.6rem;
+      background: rgba(104,211,145,0.06);
+      border: 1px dashed rgba(104,211,145,0.25);
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.25s;
+    }
+    .hosted-github-cta:hover {
+      border-color: var(--accent3);
+      background: rgba(104,211,145,0.1);
+      transform: translateX(4px);
+    }
+    .hosted-github-cta .hgc-icon {
+      font-size: 1.4rem;
+    }
+    .hosted-github-cta .hgc-text {
+      flex: 1;
+    }
+    .hosted-github-cta .hgc-title {
+      font-weight: 600;
+      color: var(--accent3);
+      font-size: 0.92rem;
+    }
+    .hosted-github-cta .hgc-sub {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--muted);
+      margin-top: 0.1rem;
+    }
+    .hosted-github-cta .hgc-arrow {
+      color: var(--accent3);
+      font-size: 1rem;
     }
 
+    /* ── Contact ── */
+    #contact { text-align: center; }
     #contact .section-label { justify-content: center; }
     #contact .section-label::before { display: none; }
-
     .contact-intro {
       color: var(--muted);
       max-width: 480px;
       margin: 0 auto 2.5rem;
       line-height: 1.8;
     }
-
     .contact-links {
       display: flex;
       justify-content: center;
@@ -726,7 +795,6 @@
       flex-wrap: wrap;
       margin-bottom: 3rem;
     }
-
     .contact-link {
       display: inline-flex;
       align-items: center;
@@ -742,7 +810,6 @@
       text-decoration: none;
       transition: all 0.25s;
     }
-
     .contact-link:hover {
       color: var(--accent);
       border-color: var(--accent);
@@ -775,14 +842,12 @@
       color: var(--accent3);
       margin-bottom: 2rem;
     }
-
     .open-dot {
       width: 7px; height: 7px;
       border-radius: 50%;
       background: var(--accent3);
       animation: pulse 2s infinite;
     }
-
     @keyframes pulse {
       0%, 100% { opacity: 1; transform: scale(1); }
       50% { opacity: 0.5; transform: scale(0.8); }
@@ -799,13 +864,11 @@
       overflow: hidden;
       margin-bottom: 4rem;
     }
-
     .stat-box {
       background: var(--bg2);
       padding: 1.8rem 1.5rem;
       text-align: center;
     }
-
     .stat-num {
       font-family: var(--font-display);
       font-size: 2rem;
@@ -814,7 +877,6 @@
       line-height: 1;
       margin-bottom: 0.3rem;
     }
-
     .stat-label {
       font-family: var(--font-mono);
       font-size: 0.65rem;
@@ -836,13 +898,10 @@
       .hosted-grid { grid-template-columns: 1fr; }
       .stats-strip { grid-template-columns: repeat(2, 1fr); }
     }
-
     @media (max-width: 480px) {
       .nav-links { display: none; }
       .skills-grid { grid-template-columns: 1fr; }
     }
-
-    /* ── Reduced motion ── */
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
     }
@@ -850,9 +909,14 @@
 </head>
 <body>
 
+<!-- ══ TYPEWRITER INTRO OVERLAY ══ -->
+<div id="typewriter-overlay">
+  <div class="tw-line" id="tw1">Hello, I am <span class="accent">Laxman Khatri</span><span class="tw-cursor" id="tw-cur"></span></div>
+</div>
+
 <canvas id="bg-canvas"></canvas>
 
-<div class="wrap">
+<div class="wrap" id="main-wrap" style="opacity:0;">
 
   <!-- ══ NAV ══ -->
   <nav id="nav">
@@ -867,7 +931,7 @@
   </nav>
 
   <!-- ══ HERO ══ -->
-  <section id="hero" style="position:relative;">
+  <section id="hero">
     <div class="open-badge" id="hero-badge">
       <span class="open-dot"></span>
       Open to opportunities
@@ -899,22 +963,16 @@
       <div class="about-text">
         <p>I'm Laxman Khatri, a Software Engineer in my final year of B.E. Software Engineering at Nepal College of Information and Technology (NCIT). I specialise in building full-stack web applications and have a growing passion for AI/ML integration.</p>
         <p>My toolkit spans Python, JavaScript, React, Next.js, FastAPI, Node.js, Django, and cloud services on AWS. I care equally about the front-end experience and the back-end architecture that powers it.</p>
-        <p>When I'm not coding, you'll find me exploring Nepal's mountains — like Rara Lake in the photo — or contributing to open-source projects.</p>
-        <div style="margin-top: 1.8rem; display: flex; gap: 1rem;">
+        <p>I'm always excited to collaborate on ambitious software development projects and startups. If you have an idea that needs execution — or are building something meaningful and want a dedicated engineer to join forces — <a href="mailto:laxmankhatri568@gmail.com" style="color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(99,179,237,0.4);">say hello at laxmankhatri568@gmail.com</a>. Let's build something great together.</p>
+        <div style="margin-top: 1.8rem; display: flex; gap: 1rem; flex-wrap: wrap;">
           <a href="https://github.com/melaxman" class="btn btn-outline" style="font-size:0.82rem; padding: 0.6rem 1.2rem;" target="_blank">GitHub ↗</a>
           <a href="https://www.linkedin.com/in/laxman-khatri/" class="btn btn-outline" style="font-size:0.82rem; padding: 0.6rem 1.2rem;" target="_blank">LinkedIn ↗</a>
           <a href="https://khatrilaxman.com.np" class="btn btn-outline" style="font-size:0.82rem; padding: 0.6rem 1.2rem;" target="_blank">Website ↗</a>
         </div>
       </div>
       <div class="about-photo">
-        <!-- 
-          REPLACE src with your actual photo path in the repo, e.g. assets/imgs/lax2.jpg
-          or use the Rara Lake photo: assets/imgs/rara.jpg
-        -->
-        <img src="https://khatrilaxman.com.np/assets/imgs/lax2.jpg" alt="Laxman Khatri at Rara Lake" />
-        <div class="about-photo-caption">
-          <div class="location">📍 Rara National Park</div>
-          <div class="lake">Rara Lake, Nepal</div>
+        <div class="about-photo-frame">
+          <img src="https://khatrilaxman.com.np/assets/imgs/lax2.jpg" alt="Laxman Khatri" />
         </div>
       </div>
     </div>
@@ -1011,6 +1069,25 @@
     <div class="section-label">Experience</div>
     <h2 class="section-title">Where I've worked.</h2>
     <div class="timeline">
+
+      <!-- Current role -->
+      <div class="timeline-item current">
+        <div class="timeline-date">
+          April 2026 — Present
+          <span class="current-badge"><span class="current-badge-dot"></span> Current</span>
+        </div>
+        <div class="timeline-role">Junior Frontend Developer</div>
+        <div class="timeline-company">Neoyaan · Full-time</div>
+        <p class="timeline-desc">Working as a Junior Frontend Developer at Neoyaan, contributing to modern web application development. Building and maintaining responsive user interfaces, collaborating with cross-functional teams, and delivering polished digital experiences.</p>
+        <div class="skill-tags" style="margin-top: 0.8rem;">
+          <span class="tag">React.js</span>
+          <span class="tag">Next.js</span>
+          <span class="tag">Frontend Development</span>
+          <span class="tag green">Active</span>
+        </div>
+      </div>
+
+      <!-- Previous role -->
       <div class="timeline-item">
         <div class="timeline-date">Dec 2025 — Feb 2026</div>
         <div class="timeline-role">Frontend Developer</div>
@@ -1022,6 +1099,7 @@
           <span class="tag">Payment Integration</span>
         </div>
       </div>
+
     </div>
   </section>
 
@@ -1042,7 +1120,9 @@
           <span class="tag purple">Django</span>
           <span class="tag green">IoT</span>
         </div>
-        <a href="https://github.com/melaxman" class="project-link" target="_blank">View on GitHub →</a>
+        <div class="project-links">
+          <a href="https://github.com/melaxman" class="project-link" target="_blank">View on GitHub →</a>
+        </div>
       </div>
 
       <div class="project-card alt">
@@ -1056,7 +1136,9 @@
           <span class="tag">Python</span>
           <span class="tag">Streamlit</span>
         </div>
-        <a href="https://github.com/melaxman" class="project-link" target="_blank">View on GitHub →</a>
+        <div class="project-links">
+          <a href="https://github.com/melaxman" class="project-link" target="_blank">View on GitHub →</a>
+        </div>
       </div>
 
       <div class="project-card">
@@ -1070,7 +1152,9 @@
           <span class="tag">PostgreSQL</span>
           <span class="tag green">Docker</span>
         </div>
-        <a href="https://github.com/melaxman" class="project-link" target="_blank">View on GitHub →</a>
+        <div class="project-links">
+          <a href="https://github.com/melaxman" class="project-link" target="_blank">View on GitHub →</a>
+        </div>
       </div>
 
       <div class="project-card alt">
@@ -1083,9 +1167,20 @@
           <span class="tag green">IoT</span>
           <span class="tag">Research</span>
         </div>
-        <span class="project-link" style="cursor:default; opacity:0.6;">ICICSET 2025 Publication</span>
+        <div class="project-links">
+          <a href="https://journal.ncit.edu.np/index.php/icicset/article/view/24" class="project-link" target="_blank">Read Paper →</a>
+        </div>
       </div>
 
+    </div>
+
+    <!-- GitHub CTA -->
+    <div class="github-cta">
+      <div>
+        <div class="github-cta-text">Want to see <span>more projects?</span></div>
+        <div class="github-cta-sub">All my work — experiments, open source, and side projects — lives on GitHub.</div>
+      </div>
+      <a href="https://github.com/melaxman" class="btn btn-outline" target="_blank" style="white-space: nowrap; flex-shrink: 0;">⌥ Visit GitHub →</a>
     </div>
   </section>
 
@@ -1111,6 +1206,15 @@
         <span class="hosted-arrow">→</span>
       </a>
     </div>
+    <!-- GitHub more CTA -->
+    <a class="hosted-github-cta" href="https://github.com/melaxman" target="_blank">
+      <div class="hgc-icon">⌥</div>
+      <div class="hgc-text">
+        <div class="hgc-title">...and many more on GitHub</div>
+        <div class="hgc-sub">github.com/melaxman — view all repositories, forks, and contributions</div>
+      </div>
+      <div class="hgc-arrow">→</div>
+    </a>
   </section>
 
   <!-- ══ EDUCATION ══ -->
@@ -1144,18 +1248,30 @@
     <div class="section-label">Certifications</div>
     <h2 class="section-title" style="margin-bottom: 2rem;">Credentials & achievements.</h2>
     <div class="cert-list">
-      <div class="cert-item">
+      <a class="cert-item" href="https://www.credly.com/badges/1126330d-44bc-44cd-a77a-f7a7d339c457/public_url" target="_blank">
         <div class="cert-icon">☁️</div>
-        <div class="cert-title">AWS Academy Graduate — Cloud Foundations</div>
-      </div>
-      <div class="cert-item">
+        <div class="cert-body">
+          <div class="cert-title">AWS Academy Graduate — Cloud Foundations</div>
+          <div class="cert-link-label">Verify on Credly →</div>
+        </div>
+        <span class="cert-arrow">→</span>
+      </a>
+      <a class="cert-item" href="https://www.credly.com/badges/0f98d43b-c3bc-422a-98e0-b8a007f110cf/linked_in?t=swcsjr" target="_blank">
         <div class="cert-icon">🏗️</div>
-        <div class="cert-title">AWS Academy Graduate — Cloud Architecting (Training Badge)</div>
-      </div>
-      <div class="cert-item">
+        <div class="cert-body">
+          <div class="cert-title">AWS Academy Graduate — Cloud Architecting (Training Badge)</div>
+          <div class="cert-link-label">Verify on Credly →</div>
+        </div>
+        <span class="cert-arrow">→</span>
+      </a>
+      <a class="cert-item" href="https://journal.ncit.edu.np/index.php/icicset/article/view/24" target="_blank">
         <div class="cert-icon">📄</div>
-        <div class="cert-title">Research Paper — ICICSET 2025: IoT-based AQI Forecasting</div>
-      </div>
+        <div class="cert-body">
+          <div class="cert-title">Research Paper — ICICSET 2025: IoT-based AQI Forecasting</div>
+          <div class="cert-link-label">Read publication →</div>
+        </div>
+        <span class="cert-arrow">→</span>
+      </a>
     </div>
   </section>
 
@@ -1163,7 +1279,7 @@
   <section id="contact">
     <div class="section-label">Get in touch</div>
     <h2 class="section-title">Let's build something<br>together.</h2>
-    <p class="contact-intro">I'm currently open to new opportunities — whether it's a full-time role, freelance project, or just a chat about tech. My inbox is always open.</p>
+    <p class="contact-intro">I'm currently open to new opportunities — full-time roles, freelance projects, startups, and collaborations. If you're building something exciting, I'd love to hear about it. My inbox is always open.</p>
     <div class="contact-links">
       <a href="mailto:laxmankhatri568@gmail.com" class="contact-link">✉ Email me</a>
       <a href="https://www.linkedin.com/in/laxman-khatri/" class="contact-link" target="_blank">in LinkedIn</a>
@@ -1192,14 +1308,13 @@
   const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 200);
   camera.position.z = 40;
 
-  // Particle field
   const count = 2200;
   const positions = new Float32Array(count * 3);
   const colors = new Float32Array(count * 3);
   const palette = [
-    [0.388, 0.702, 0.929], // blue
-    [0.392, 0.827, 0.569], // green
-    [0.627, 0.478, 0.918], // purple
+    [0.388, 0.702, 0.929],
+    [0.392, 0.827, 0.569],
+    [0.627, 0.478, 0.918],
   ];
   for (let i = 0; i < count; i++) {
     positions[i * 3]     = (Math.random() - 0.5) * 120;
@@ -1226,7 +1341,6 @@
   const points = new THREE.Points(geo, mat);
   scene.add(points);
 
-  // Connecting lines (sparse)
   const lineMat = new THREE.LineBasicMaterial({ color: 0x63b3ed, transparent: true, opacity: 0.04 });
   const lineGeo = new THREE.BufferGeometry();
   const linePositions = [];
@@ -1242,14 +1356,12 @@
   const lines = new THREE.LineSegments(lineGeo, lineMat);
   scene.add(lines);
 
-  // Mouse parallax
   let mouseX = 0, mouseY = 0;
   document.addEventListener('mousemove', e => {
     mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
     mouseY = -(e.clientY / window.innerHeight - 0.5) * 2;
   });
 
-  // Scroll
   let scrollY = 0;
   window.addEventListener('scroll', () => { scrollY = window.scrollY; });
 
@@ -1257,18 +1369,14 @@
   function animate(t) {
     animId = requestAnimationFrame(animate);
     const time = t * 0.001;
-
     points.rotation.y = time * 0.018 + mouseX * 0.05;
     points.rotation.x = time * 0.010 + mouseY * 0.03;
     lines.rotation.y = points.rotation.y;
     lines.rotation.x = points.rotation.x;
-
     camera.position.y = -scrollY * 0.012;
-
     renderer.render(scene, camera);
   }
 
-  // Pause when tab hidden
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) cancelAnimationFrame(animId);
     else animate(0);
@@ -1284,18 +1392,80 @@
 })();
 </script>
 
+<!-- ══ TYPEWRITER ANIMATION ══ -->
+<script>
+(function() {
+  const overlay = document.getElementById('typewriter-overlay');
+  const tw1 = document.getElementById('tw1');
+  const mainWrap = document.getElementById('main-wrap');
+
+  // Full text to type (the span content is handled as plain text for typing)
+  const fullText = "Hello, I am Laxman Khatri";
+  const accentStart = 15; // index where "Laxman Khatri" begins
+
+  let charIndex = 0;
+  let typed = '';
+
+  function buildHTML(text) {
+    if (text.length <= accentStart) {
+      return text + '<span class="tw-cursor"></span>';
+    }
+    const plain = text.slice(0, accentStart);
+    const accent = text.slice(accentStart);
+    return plain + '<span class="accent">' + accent + '</span><span class="tw-cursor"></span>';
+  }
+
+  // Animate the line width open
+  tw1.style.width = '0';
+  tw1.style.overflow = 'hidden';
+  tw1.style.whiteSpace = 'nowrap';
+
+  // First expand the container width to full
+  setTimeout(() => {
+    tw1.style.transition = 'width 0.01s';
+    tw1.style.width = 'auto';
+
+    function typeChar() {
+      if (charIndex <= fullText.length) {
+        typed = fullText.slice(0, charIndex);
+        tw1.innerHTML = buildHTML(typed);
+        charIndex++;
+        setTimeout(typeChar, charIndex === 1 ? 300 : 60 + Math.random() * 40);
+      } else {
+        // Hold for a moment, then fade out overlay and show main
+        setTimeout(() => {
+          overlay.style.transition = 'opacity 0.7s ease';
+          overlay.style.opacity = '0';
+          mainWrap.style.transition = 'opacity 0.7s ease';
+          mainWrap.style.opacity = '1';
+          setTimeout(() => {
+            overlay.style.display = 'none';
+            // Trigger GSAP hero animations now
+            window._triggerHeroAnimations && window._triggerHeroAnimations();
+          }, 700);
+        }, 700);
+      }
+    }
+
+    typeChar();
+  }, 300);
+})();
+</script>
+
 <!-- ══ GSAP ANIMATIONS ══ -->
 <script>
 gsap.registerPlugin(ScrollTrigger);
 
-// Hero entrance
-const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-tl.to('#hero-badge', { opacity: 1, y: 0, duration: 0.6 }, 0.3)
-  .to('.hero-eyebrow', { opacity: 1, y: 0, duration: 0.7 }, 0.5)
-  .to('.hero-name',    { opacity: 1, y: 0, duration: 0.9 }, 0.7)
-  .to('.hero-role',    { opacity: 1, y: 0, duration: 0.7 }, 0.9)
-  .to('.hero-desc',    { opacity: 1, y: 0, duration: 0.7 }, 1.05)
-  .to('.hero-cta',     { opacity: 1, y: 0, duration: 0.7 }, 1.2);
+// Store hero animation trigger
+window._triggerHeroAnimations = function() {
+  const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+  tl.to('#hero-badge', { opacity: 1, y: 0, duration: 0.6 }, 0)
+    .to('.hero-eyebrow', { opacity: 1, y: 0, duration: 0.7 }, 0.15)
+    .to('.hero-name',    { opacity: 1, y: 0, duration: 0.9 }, 0.3)
+    .to('.hero-role',    { opacity: 1, y: 0, duration: 0.7 }, 0.5)
+    .to('.hero-desc',    { opacity: 1, y: 0, duration: 0.7 }, 0.65)
+    .to('.hero-cta',     { opacity: 1, y: 0, duration: 0.7 }, 0.8);
+};
 
 // Timeline items
 gsap.utils.toArray('.timeline-item').forEach((el, i) => {
@@ -1344,7 +1514,8 @@ document.querySelectorAll('.project-card').forEach(card => {
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    card.querySelector('.glow').style.transform = `translate(${x - 100}px, ${y - 100}px)`;
+    const glow = card.querySelector('.glow');
+    if (glow) glow.style.transform = `translate(${x - 100}px, ${y - 100}px)`;
   });
 });
 </script>
